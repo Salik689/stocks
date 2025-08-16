@@ -3,6 +3,7 @@
 import Image from "next/image";
 import './page.css'
 import { useForm } from "react-hook-form";
+import Navbar from "./components/Navbar";
 
 
 export default function Home() {
@@ -38,7 +39,7 @@ export default function Home() {
   }
   return (
     <>
-  
+      <Navbar />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="input">
           <label htmlFor="itemName">Item Name</label>

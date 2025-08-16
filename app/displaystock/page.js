@@ -1,7 +1,7 @@
 "use client";
 import './displayStock.css';
 import React, { useEffect, useState } from "react";
-
+import Navbar from '../components/Navbar';
 const DisplayStock = () => {
     const [stock, setStock] = useState([]);
 
@@ -27,6 +27,7 @@ const DisplayStock = () => {
     };
     return (
         <div className="stockBlocksPage">
+            <Navbar/>
             {Array.isArray(stock) && stock.length > 0
                 ? stock.map((item, idx) => (
                     <div key={idx} className="stockBlock">
