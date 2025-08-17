@@ -1,28 +1,29 @@
-
-form{
+form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-     background-color: rgba(128, 128, 128, 0.637);
+    background-color: rgba(128, 128, 128, 0.637);
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.877);
     margin: 20px;
     font-weight: bold;
     padding: 20px;
     border-radius: 10px;
-    
-  
+    width: 90%;
+
+
 }
 
-.input{
+.input {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin:10px;
+    margin: 10px;
 }
-.checkItem{
-    display:flex;
+
+.checkItem {
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -31,28 +32,34 @@ form{
 
 
 }
-.changeQuantity{
+
+.changeQuantity {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     gap: 10px;
 }
-.changeQuantity button, .done{
+
+.changeQuantity button,
+.done {
     padding: 10px;
     border-radius: 10px;
-    margin:5px;
+    margin: 5px;
 }
-select{
+
+select {
     padding: 10px;
     border-radius: 20px;
-     min-width: 300px;
-    max-width: auto;
+    width: 70%;
+
 }
-input{
+
+input {
     padding: 10px;
     border-radius: 20px;
 }
-.done{
+
+.done {
     width: 200px;
 }
