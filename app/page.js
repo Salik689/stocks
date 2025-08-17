@@ -40,15 +40,16 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      <div className="form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="input">
-          <label htmlFor="itemName">Item Name</label>
+          <label htmlFor="name">Item Name</label>
           <input
             type="text"
             placeholder="Enter item name"
-            name="itemName"
-            id="itemName"
-            {...register("itemName", {
+            name="name"
+            id="name"
+            {...register("name", {
               required: "Please enter the delivery postcode",
             })}
           />
@@ -62,7 +63,19 @@ export default function Home() {
             name="itemQuantity"
             id="itemQuantity"
             {...register("itemQuantity", {
-              required: "Please enter the delivery postcode",
+
+            })}
+          />
+          </div>
+        <div className="input">
+          <label htmlFor="number">Item Number</label>
+          <input
+            type="number"
+            placeholder="Enter the item number"
+            name="number"
+            id="number"
+            {...register("Number", {
+
             })}
           />
 
@@ -75,7 +88,7 @@ export default function Home() {
             name="itemLocation"
             id="itemLocation"
             {...register("itemLocation", {
-              required: "Please enter the delivery postcode",
+
             })}
           />
         </div>
@@ -83,6 +96,7 @@ export default function Home() {
           <button className="submitBtn" type="submit" >Submit</button>
         </div>
       </form>
+      </div>
     </>
   );
 }

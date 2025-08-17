@@ -22,7 +22,7 @@ const Page = () => {
     }, []);
 
     const selectedItemId = watch("selectedItemId");
-    const selectedItem = stock.find(item => item._id === selectedItemId);
+    const selectedItem = Array.isArray(stock) ? stock.find(item => item._id === selectedItemId) : undefined;
 
     // Reset local count when selecting new item
     useEffect(() => {
@@ -101,12 +101,11 @@ const Page = () => {
                 Quantity: {currentQuantity}
             </div>
             <div className="changeQuantity">
-                <button type="button" onClick={() => handleChangeQuantity(1)} disabled={!selectedItemId}>+</button>
-                <button type="button" onClick={() => handleChangeQuantity(-1)} disabled={!selectedItemId}>-</button>
-                
+                <button onClick={() => handleChangeQuantity(1)}> <img src="/images/plus.gif" width={30} height={30} alt="" /> </button>
+                <button onClick={() => handleChangeQuantity(-1)}><img src="/images/minus.gif" width={30} height={30} alt="" /></button>
             </div>
-            
-                <button className='done' type="button" onClick={handleSave} disabled={!selectedItemId}>✅ Done</button>
+
+            <button className='done' type="button" onClick={handleSave} disabled={!selectedItemId}>✅ Done</button>
 
         </div>
     );

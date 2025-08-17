@@ -4,6 +4,9 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+      background-image: url('/images/jalsa.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .stockBlock{
  min-width: 300px;
@@ -14,6 +17,14 @@
     justify-content: center;
     padding: 10px;
     margin: 10px;
+    background-color: rgba(128, 128, 128, 0.664);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.877);
+    color: white;
+    
+}
+span{
+    font-weight: bold;
+
 }
 ul{
     list-style: none;
@@ -27,6 +38,7 @@ ul{
     flex-direction: row;   
     justify-content: space-between;
     padding: 0px 20px;
+    margin: 10px 0px ;
 
 }
 .changeQuantity button{
@@ -34,4 +46,18 @@ ul{
     border-radius: 5px;
     background-color: green;
     color: white;
+}
+.deleteBtn{
+    width: auto;
+    height: auto;
+    padding: 3x;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+}
+.delete{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
 }

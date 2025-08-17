@@ -29,11 +29,12 @@ export async function POST(request) {
 
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
-        to: "salikahmed6809@gmail.com",
+        to: "hafizawais0325@gmail.com",
         subject: "Stock Quantity Updated",
         text: `Item Name: ${updatedItem.itemName}
 Quantity left: ${updatedItem.itemQuantity}
 Shoba: ${shoba}`,
+
       });
     }
 

@@ -6,6 +6,9 @@ import './Navbar.css'
 const Navbar = ({ }) => {
     return (
         <nav>
+            <div className="logo">
+                <img src="images/jalsaLogo.png" width={50} alt="" />
+            </div>
             <ul>
 
 

@@ -10,7 +10,7 @@ export async function GET() {
       headers: { "Content-Type": "application/json" }
     });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ error: "Failed to fetch stock" }), { status: 500 });
+    console.error("MongoDB error:", err); // More detailed error
+    return new Response(JSON.stringify({ error: "Failed to fetch stock", details: err.message }), { status: 500 });
   }
 }
