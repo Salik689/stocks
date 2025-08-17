@@ -1,12 +1,16 @@
+
 .stockBlocksPage{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-      background-image: url('/images/jalsa.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
+    color: rgb(0, 0, 0);
+
+}
+.stock{
+     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 .stockBlock{
  min-width: 300px;
@@ -17,9 +21,9 @@
     justify-content: center;
     padding: 10px;
     margin: 10px;
-    background-color: rgba(128, 128, 128, 0.664);
+    background-color: rgba(128, 128, 128, 0.329);
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.877);
-    color: white;
+    color: rgb(0, 0, 0);
     
 }
 span{

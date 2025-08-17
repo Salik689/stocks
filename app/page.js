@@ -43,14 +43,14 @@ export default function Home() {
       <div className="form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="input">
-          <label htmlFor="name">Item Name</label>
+          <label htmlFor="itemName">Item Name</label>
           <input
             type="text"
             placeholder="Enter item name"
-            name="name"
-            id="name"
-            {...register("name", {
-              required: "Please enter the delivery postcode",
+            name="itemName"
+            id="itemName"
+            {...register("itemName", {
+              required: "name reqiured",
             })}
           />
 
