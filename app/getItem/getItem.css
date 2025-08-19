@@ -43,6 +43,11 @@ form {
     
 }
 
+@media (max-width: 780px) {
+    .details {
+        flex-direction: column;
+    }
+}
 
 
 .changeQuantity {
