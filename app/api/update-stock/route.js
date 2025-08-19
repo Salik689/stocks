@@ -41,7 +41,7 @@ Quantity left: ${item.itemQuantity}`
 
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
-        to: "salikahmed6809@gmail.com",
+        to: "hafizawais0325@gmail.com",
         subject: "Stock Quantities Updated",
         text: `${itemsText}
 Details:
