@@ -5,19 +5,22 @@
     justify-content: center;
     background-color: rgba(0, 128, 0, 0.219);
     width: 100%;
+    padding-top: 70px;
 
 }
-
 .saveNav {
-    position: sticky;
-    top: 0;
-    /* Stick to top */
-    background-color: #00b60f70;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #00b60f70;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  z-index: 1000;
 }
+
+
 
 form {
     display: flex;

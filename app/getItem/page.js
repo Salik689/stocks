@@ -81,15 +81,17 @@ const Page = () => {
 
     return (
         <>
-            <div className="saveNav">
-                <button
-                    className="done"
-                    type="button"
-                    onClick={handleDone}
-                    disabled={Object.values(selectedItems).every(qty => qty === 0)}>
-                    ✅ Save all
-                </button>
-            </div>
+       
+                <div className="saveNav">
+                    <button
+                        className="done"
+                        type="button"
+                        onClick={handleDone}
+                        disabled={Object.values(selectedItems).every(qty => qty === 0)}>
+                        ✅ Save all
+                    </button>
+                </div>
+            
             <div className="getItemsPage" >
                 <form>
                     <div className="details">
