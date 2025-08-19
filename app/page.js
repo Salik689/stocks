@@ -96,7 +96,9 @@ export default function Home() {
           <button className="submitBtn" type="submit" >Submit</button>
         </div>
       </form>
+      
       </div>
+      
     </>
   );
 }

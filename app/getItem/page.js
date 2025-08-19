@@ -1,16 +1,12 @@
 "use client";
-import './getItem.css'
 import React, { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
+import './getItem.css';
 
 const Page = () => {
     const [stock, setStock] = useState([]);
-    const [currentQuantity, setcurrentQuantity] = useState(0);
-    const {
-        register,
-        handleSubmit,
-        watch,
-    } = useForm();
+    const [selectedItems, setSelectedItems] = useState({}); // {itemId: quantityToRemove}
+    const { register, handleSubmit, watch } = useForm();
 
     useEffect(() => {
         const fetchStock = async () => {
@@ -21,93 +17,149 @@ const Page = () => {
         fetchStock();
     }, []);
 
-    const selectedItemId = watch("selectedItemId");
-    const selectedItem = Array.isArray(stock) ? stock.find(item => item._id === selectedItemId) : undefined;
-
-    // Reset local count when selecting new item
-    useEffect(() => {
-        setcurrentQuantity(0);
-    }, [selectedItemId]);
-
-    // Just update LOCAL quantity (+/-), not DB yet
-    const handleChangeQuantity = (change) => {
-        if (change === -1 && currentQuantity === 0) return; // prevent < 0
-        if (change === 1 && selectedItem && selectedItem.itemQuantity === 0) return; // no stock left
-        setcurrentQuantity(prev => Math.max(0, prev + change));
+    // Handle checkbox toggle
+    const handleCheckbox = (itemId) => {
+        setSelectedItems(prev => {
+            if (Object.prototype.hasOwnProperty.call(prev, itemId)) {
+                // Unselect: remove from selected
+                const copy = { ...prev };
+                delete copy[itemId];
+                return copy;
+            } else {
+                // Select: add with initial quantity 0
+                return { ...prev, [itemId]: 0 };
+            }
+        });
     };
 
-    // "Done" button → save changes to DB + send notification
-    const handleSave = async () => {
+    // Handle plus/minus for each selected item
+    const handleChangeQuantity = (itemId, change) => {
+        setSelectedItems(prev => {
+            const current = prev[itemId] || 0;
+            const item = stock.find(i => i._id === itemId);
+            if (!item) return prev;
+            let newValue = current + change;
+            if (newValue < 0) newValue = 0;
+            if (newValue > item.itemQuantity) newValue = item.itemQuantity;
+            return { ...prev, [itemId]: newValue };
+        });
+    };
+
+    // Handle Done: update all selected items in DB
+    const handleDone = async () => {
         const shobaValue = watch("shoba");
+        const nameDetailsValue = watch("nameDetails");
+        const aimsIdValue = watch("aimsId");
+        const items = Object.entries(selectedItems)
+            .filter(([id, qty]) => qty > 0)
+            .map(([id, qty]) => ({
+                id,
+                change: -qty,
+                taken: qty // add this line
+            }));
 
-        if (!selectedItemId || currentQuantity === 0) {
-            alert("⚠️ Nothing to save");
-            return;
-        }
-
-        const res = await fetch("/api/update-stock", {
+        // Send all items in one request
+        await fetch("/api/update-stock", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                id: selectedItemId,
-                change: -currentQuantity,
+                items,
                 done: true,
-                shoba: shobaValue // send shoba value to backend
+                shoba: shobaValue,
+                nameDetails: nameDetailsValue,
+                aimsId: aimsIdValue
             })
         });
 
-        const data = await res.json();
-        if (res.ok) {
-            alert("✅ Quantity saved & notification sent!");
-
-            // Refresh stock after saving
-            const req = await fetch("/api/getStock");
-            const updatedStock = await req.json();
-            setStock(updatedStock);
-
-            setcurrentQuantity(0); // reset
-        } else {
-            alert("❌ Failed to save: " + data.error);
-        }
+        // Refresh stock and reset
+        const req = await fetch("/api/getStock");
+        const updatedStock = await req.json();
+        setStock(updatedStock);
+        setSelectedItems({});
+        alert("✅ Quantities updated!");
     };
 
     return (
-        <div className="checkItem">
-            <form>
-                <div className="input">
-                    <label htmlFor="shoba">Shoba</label>
-                    <input type="text" placeholder='Enter Shoba' name='shoba' id='shoba' {...register("shoba", {
-                        required: "Please enter Shoba",
-                    })} />
-                </div>
-                <div className="input">
-                    <label htmlFor="selectedItemId">Please select an item</label>
-                    <select {...register("selectedItemId")}>
-                        <option value="">-- Please select --</option>
-                        {Array.isArray(stock) && stock.length > 0
-                            ? stock.map((item, idx) => (
+        <>
+            <div className="saveNav">
+                <button
+                    className="done"
+                    type="button"
+                    onClick={handleDone}
+                    disabled={Object.values(selectedItems).every(qty => qty === 0)}>
+                    ✅ Save all
+                </button>
+            </div>
+            <div className="getItemsPage" >
+                <form>
+                    <div className="details">
+                        <div className="input">
+                            <label htmlFor="shoba">Shoba</label>
+                            <input type="text" placeholder='Enter Shoba' name='shoba' id='shoba' {...register("shoba", {
+                                required: "Please enter Shoba",
+                            })} />
+                        </div>
+                        <div className="input">
+                            <label htmlFor="nameDetails">Name</label>
+                            <input type="text" placeholder='Enter your name' name='nameDetails' id='nameDetails' {...register("nameDetails", {
+                                required: "Please enter name",
+                            })} />
+                        </div>
+                        <div className="input">
+                            <label htmlFor="aimsId">Aims Id</label>
+                            <input type="text" placeholder='Enter aimsId' name='aimsId' id='aimsId' {...register("aimsId", {
+                                required: "Please enter Aims Id",
+                            })} />
+                        </div>
+                    </div>
 
-                                <option key={item._id || idx} value={item._id}>
-                                    {item.itemName}
-                                </option>
+                    <div className="listOFitems" >
+                        {Array.isArray(stock) && stock.length > 0 ? (
+                            stock.map((item, idx) => (
+                                <div className="item" key={item._id || idx}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedItems[item._id] !== undefined}
+                                        onChange={() => handleCheckbox(item._id)}
+                                    />
+                                    <span>{item.itemName}</span>
+                                    <div className="changeQuantity" >
+                                        <button
+                                            type="button"
+                                            disabled={selectedItems[item._id] === undefined}
+                                            onClick={() => handleChangeQuantity(item._id, 1)}
+                                        >+</button>
+
+                                        <span>
+                                            {selectedItems[item._id] !== undefined ? selectedItems[item._id] : 0}
+                                        </span>
+
+                                        <button
+                                            type="button"
+                                            disabled={selectedItems[item._id] === undefined}
+                                            onClick={() => handleChangeQuantity(item._id, -1)}
+                                        >-</button>
+
+                                    </div>
+
+
+
+                                </div>
                             ))
-                            : <option>No items found</option>
-                        }
-                    </select>
-                </div>
-            </form>
-
-            <div className="quantity">
-                Quantity: {currentQuantity}
+                        ) : (
+                            <div>No items found</div>
+                        )}
+                    </div>
+                    <button
+                        className="done"
+                        type="button"
+                        onClick={handleDone}
+                        disabled={Object.values(selectedItems).every(qty => qty === 0)}>
+                        ✅ Save all
+                    </button>
+                </form>
             </div>
-            <div className="changeQuantity">
-                <button onClick={() => handleChangeQuantity(1)}> <img src="/images/plus.gif" width={30} height={30} alt="" /> </button>
-                <button onClick={() => handleChangeQuantity(-1)}><img src="/images/minus.gif" width={30} height={30} alt="" /></button>
-            </div>
-
-            <button className='done' type="button" onClick={handleSave} disabled={!selectedItemId}>✅ Done</button>
-
-        </div>
+        </>
     );
 }
 

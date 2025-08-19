@@ -30,7 +30,9 @@ a {
 body{
   /* background-color: rgb(0, 128, 0,0.3);; */
   background-image: url('/images/jalsa.jpg');
-  background-position: center;
+  background-position:top;
+
   background-repeat: no-repeat;
+
 
 }

@@ -4,20 +4,26 @@ import nodemailer from "nodemailer";
 
 export async function POST(request) {
   try {
-    const { id, change, done, shoba } = await request.json();
+    const { items, done, shoba, nameDetails, aimsId } = await request.json();
     const client = await clientPromise;
     const db = client.db("inventory");
 
-    // Update DB
-    await db.collection("stock").updateOne(
-      { _id: new ObjectId(id) },
-      { $inc: { itemQuantity: change } }
-    );
+    let updatedItems = [];
 
-    // Get updated item
-    const updatedItem = await db.collection("stock").findOne({ _id: new ObjectId(id) });
+    // Update all items and keep track of taken quantity
+    for (const { id, change, taken } of items) {
+      await db.collection("stock").updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { itemQuantity: change } }
+      );
+      const updatedItem = await db.collection("stock").findOne({ _id: new ObjectId(id) });
+      updatedItems.push({
+        ...updatedItem,
+        taken: taken ?? Math.abs(change) // fallback if taken is not sent
+      });
+    }
 
-    // Send email only when "Done" is clicked
+    // Send a single email with all updated items
     if (done) {
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -27,18 +33,25 @@ export async function POST(request) {
         },
       });
 
+      const itemsText = updatedItems.map(item =>
+        `Item Name: ${item.itemName}
+Quantity taken: ${item.taken}
+Quantity left: ${item.itemQuantity}`
+      ).join('\n\n');
+
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
-        to: "hafizawais0325@gmail.com",
-        subject: "Stock Quantity Updated",
-        text: `Item Name: ${updatedItem.itemName}
-Quantity left: ${updatedItem.itemQuantity}
-Shoba: ${shoba}`,
-
+        to: "salikahmed6809@gmail.com",
+        subject: "Stock Quantities Updated",
+        text: `${itemsText}
+Details:
+Shoba: ${shoba}
+Name: ${nameDetails}
+Aims Id: ${aimsId}`,
       });
     }
 
-    return new Response(JSON.stringify({ success: true, updatedItem }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, updatedItems }), { status: 200 });
   } catch (err) {
     console.error("Update error:", err);
     return new Response(JSON.stringify({ error: "Failed to update stock" }), { status: 500 });
