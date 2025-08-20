@@ -6,6 +6,7 @@ import './getItem.css';
 const Page = () => {
     const [stock, setStock] = useState([]);
     const [selectedItems, setSelectedItems] = useState({}); // {itemId: quantityToRemove}
+    const [search, setSearch] = useState("");
     const { register, handleSubmit, watch } = useForm();
 
     useEffect(() => {
@@ -81,17 +82,15 @@ const Page = () => {
 
     return (
         <>
-       
-                <div className="saveNav">
-                    <button
-                        className="done"
-                        type="button"
-                        onClick={handleDone}
-                        disabled={Object.values(selectedItems).every(qty => qty === 0)}>
-                        ✅ Save all
-                    </button>
-                </div>
-            
+            <div className="saveNav">
+                <button
+                    className="done"
+                    type="button"
+                    onClick={handleDone}
+                    disabled={Object.values(selectedItems).every(qty => qty === 0)}>
+                    ✅ Save all
+                </button>
+            </div>
             <div className="getItemsPage" >
                 <form>
                     <div className="details">
@@ -114,42 +113,51 @@ const Page = () => {
                             })} />
                         </div>
                     </div>
-
+                    <div className="searchBar">
+                        <input
+                            type="text"
+                            placeholder="Search items..."
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                        />
+                    </div>
                     <div className="listOFitems" >
-                        {Array.isArray(stock) && stock.length > 0 ? (
-                            stock.map((item, idx) => (
-                                <div className="item" key={item._id || idx}>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedItems[item._id] !== undefined}
-                                        onChange={() => handleCheckbox(item._id)}
-                                    />
-                                    <span>{item.itemName}</span>
-                                    <div className="changeQuantity" >
-                                        <button
-                                            type="button"
-                                            disabled={selectedItems[item._id] === undefined}
-                                            onClick={() => handleChangeQuantity(item._id, 1)}
-                                        >+</button>
-
-                                        <span>
-                                            {selectedItems[item._id] !== undefined ? selectedItems[item._id] : 0}
-                                        </span>
-
-                                        <button
-                                            type="button"
-                                            disabled={selectedItems[item._id] === undefined}
-                                            onClick={() => handleChangeQuantity(item._id, -1)}
-                                        >-</button>
-
-                                    </div>
-
-
-
-                                </div>
-                            ))
-                        ) : (
-                            <div>No items found</div>
+                        {search.trim() === "" ? null : (
+                            Array.isArray(stock) && stock.length > 0 ? (
+                                stock.filter(item =>
+                                    item.itemName && item.itemName.toLowerCase().includes(search.toLowerCase())
+                                ).length > 0 ? (
+                                    stock.filter(item =>
+                                        item.itemName && item.itemName.toLowerCase().includes(search.toLowerCase())
+                                    ).map((item, idx) => (
+                                        <div className="item" key={item._id || idx}>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedItems[item._id] !== undefined}
+                                                onChange={() => handleCheckbox(item._id)}
+                                            />
+                                            <span>{item.itemName}</span>
+                                            <div className="changeQuantity" >
+                                                <button
+                                                    type="button"
+                                                    disabled={selectedItems[item._id] === undefined}
+                                                    onClick={() => handleChangeQuantity(item._id, 1)}
+                                                >+</button>
+                                                <span>
+                                                    {selectedItems[item._id] !== undefined ? selectedItems[item._id] : 0}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    disabled={selectedItems[item._id] === undefined}
+                                                    onClick={() => handleChangeQuantity(item._id, -1)}
+                                                >-</button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>No items found</div>
+                                )
+                            ) : null
                         )}
                     </div>
                     <button
