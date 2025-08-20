@@ -48,7 +48,7 @@ export async function POST(request) {
       try {
         const info = await transporter.sendMail({
           from: process.env.EMAIL_USER,
-          to: "hafizawais0325@gamil.com",
+          to: "hafizawais0325@gmail.com",
           subject: "Stock Quantities Updated",
           text: plainText
         });
@@ -58,10 +58,14 @@ export async function POST(request) {
       }
     }
 
-    // Store submission metadata in MongoDB
+    // Store all relevant submission data in MongoDB
     await db.collection('submissions').insertOne({
-      ...requestData,
+      shoba,
+      nameDetails,
+      aimsId,
+      items,
       updatedItems,
+      emailBody: plainText,
       createdAt: new Date()
     });
 

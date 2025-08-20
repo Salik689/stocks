@@ -46,7 +46,7 @@ const Page = () => {
         });
     };
 
-    // Handle Done: update all selected items in DB
+    // Handle Done: update all selected items in DB and generate PDF
     const handleDone = async () => {
         const shobaValue = watch("shoba");
         const nameDetailsValue = watch("nameDetails");
@@ -56,10 +56,10 @@ const Page = () => {
             .map(([id, qty]) => ({
                 id,
                 change: -qty,
-                taken: qty // add this line
+                taken: qty
             }));
 
-        // Send all items in one request
+        // 1. Update stock
         await fetch("/api/update-stock", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -72,12 +72,28 @@ const Page = () => {
             })
         });
 
+        // 2. Generate PDF (call Express backend directly)
+        try {
+            await fetch("http://localhost:3000/pdfs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    shoba: shobaValue,
+                    nameDetails: nameDetailsValue,
+                    aimsId: aimsIdValue,
+                    updatedItems: items
+                })
+            });
+        } catch (err) {
+            console.error("PDF API fetch error:", err);
+        }
+
         // Refresh stock and reset
         const req = await fetch("/api/getStock");
         const updatedStock = await req.json();
         setStock(updatedStock);
         setSelectedItems({});
-        alert("✅ Quantities updated!");
+        alert("✅ Quantities updated and PDF created!");
     };
 
     return (
