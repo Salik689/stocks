@@ -10,7 +10,7 @@ export default function ExcelIframe() {
         height="800"        // adjust height as needed
         frameBorder="0"     // React JSX requires camelCase
         scrolling="no"      // optional
-        src="https://1drv.ms/x/c/ffb62b4907d16059/IQTKRxFMqmM3Q4X3qFyhpPkqAcd44KIrFeQK8_plu9gvFRw?wdAllowInteractivity=True&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True"
+         src="https://1drv.ms/x/c/73fd37ac4ae83482/IQRGpDImzYYOT7mg5Lbii0OWAYLyJqgw-ppbz5Bpf2lCc78?wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"
       ></iframe>
     </div>
 
