@@ -1,28 +1,56 @@
 "use client";
-import React from 'react'
-import Link from 'next/link'
-import './Navbar.css'
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import "./Navbar.css";
 
-const Navbar = ({ }) => {
+
+export default function Navbar() {
+    const [open, setOpen] = useState(false);
+    const close = () => setOpen(false);
+
     return (
-        <nav>
+        <header className="site-header">
             <div className="logo">
-                <img src="images/jalsaLogo.png" width={50} alt="" />
+                <Link href="/" onClick={close}>
+                    <img src="images/jalsaLogo.png" width={50} alt="" />
+                </Link>
             </div>
-            <ul>
+
+            <button
+                className={`menu-toggle ${open ? "is-open" : ""}`}
+                aria-expanded={open}
+                aria-controls="mobileNav"
+                onClick={() => setOpen((v) => !v)}
+            >
+                {!open ? (
+                    <Image src="/images/openMenu.gif" width={50} height={50} alt="Open menu" />
+                ) : (
+                    <Image src="/images/closeMenu.gif" width={50} height={50} alt="Close menu" />
+                )}
+            </button>
+
+            {/* Slide-over panel */}
+            <nav id="mobileNav" className={`mobile-nav ${open ? "nav-open" : "nav-closed"}`}>
+                <ul>
+                    <Link href={"/getItem"}><li>Get items</li></Link>
+                    <Link href={"/"}><li>Add item</li></Link>
+                    <Link href={"/displaystock"}><li>Display Stock</li></Link>
+                    <Link href={"/demand"}><li>Demand</li></Link>
+                    <Link href={"/change"}><li>Submitions</li></Link>
 
 
-                <Link href={"/getItem"}><li>Get items</li></Link>
-                <Link href={"/"}><li>Add item</li></Link>
-                <Link href={"/displaystock"}><li>Display Stock</li></Link>
-                <Link href={"/demand"}><li>Demand</li></Link>
-                <Link href={"/change"}><li>Submitions</li></Link>
-                
-              
+                </ul>
+            </nav>
 
-            </ul>
-        </nav>
-    )
+            {/* Backdrop for outside click */}
+            {open && (
+                <button
+                    className="backdrop"
+                    aria-label="Close menu"
+                    onClick={close}
+                />
+            )}
+        </header>
+    );
 }
-
-export default Navbar
