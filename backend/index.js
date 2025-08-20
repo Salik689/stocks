@@ -40,7 +40,7 @@ app.post('/', async (req, res) => {
     try {
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
-        to: "salikahmed6809@gmail.com",
+        to: "hafizawais0325@gamil.com",
         subject: "Stock Quantities Updated",
         text: plainText
       });
