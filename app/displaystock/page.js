@@ -41,11 +41,12 @@ const DisplayStock = () => {
         if (isNaN(newQuantity)) return;
         const currentItem = stock.find(i => i._id === id);
         const change = newQuantity - (currentItem?.itemQuantity || 0);
+        if (change === 0) return;
 
         await fetch("/api/update-stock", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, change })
+            body: JSON.stringify({ items: [{ id, change }] })
         });
 
         await fetchStock();
