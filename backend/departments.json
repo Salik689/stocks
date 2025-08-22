@@ -1,562 +1,142 @@
 [
-{
-    "department": "Abbau (Frauenseite)",
-    "sum": 1949
-},
-{
-    "department": "Abbau (Männerseite)",
-    "sum": 435
-},
-{
-    "department": "Abbau Jalsa Salana",
-    "sum": 3598
-},
-{
-    "department": "Abbau_Lj",
-    "sum": 236
-},
-{
-    "department": "AIMS Service",
-    "sum": 677
-},
-{
-    "department": "Amanaat",
-    "sum": 3542
-},
-{
-    "department": "Amanaat_Lj",
-    "sum": 15
-},
-{
-    "department": "Anmeldung",
-    "sum": 6019
-},
-{
-    "department": "Anmeldung_Lj",
-    "sum": 1207
-},
-{
-    "department": "Ansagen_Lj",
-    "sum": 7
-},
-{
-    "department": "Audio_Lj",
-    "sum": 25
-},
-{
-    "department": "Auf_Abbau_Langar",
-    "sum": 517
-},
-{
-    "department": "Aufbau (Frauenseite)",
-    "sum": 10504
-},
-{
-    "department": "Aufbau (Männerseite)",
-    "sum": 100084
-},
-{
-    "department": "Aufbau Jalsa Salana",
-    "sum": 21786
-},
-{
-    "department": "Aufbau_Lj",
-    "sum": 25
-},
-{
-    "department": "Bazaar_Lj",
-    "sum": 541
-},
-{
-    "department": "Bazar",
-    "sum": 2685
-},
-{
-    "department": "Berichtserstattung_Lj",
-    "sum": 654
-},
-{
-    "department": "Betreuung Nau Mobaiaat_Lj",
-    "sum": 1262
-},
-{
-    "department": "Betreuung Tabligh Gäste_Lj",
-    "sum": 17
-},
-{
-    "department": "Buecherstand_Lj",
-    "sum": 48
-},
-{
-    "department": "Cashier",
-    "sum": 1246
-},
-{
-    "department": "Chairs Area_Lj",
-    "sum": 1618
-},
-{
-    "department": "Children Care_Lj",
-    "sum": 5529
-},
-{
-    "department": "Deg Safai",
-    "sum": 2024
-},
-{
-    "department": "Dekoration Jalsa Gah",
-    "sum": 8218
-},
-{
-    "department": "Dekoration Jalsa Salana",
-    "sum": 4929
-},
-{
-    "department": "Disziplin Außenbereich_Lj",
-    "sum": 411
-},
-{
-    "department": "Emergency",
-    "sum": 39
-},
-{
-    "department": "Empfang",
-    "sum": 415
-},
-{
-    "department": "Empfang_Lj",
-    "sum": 548
-},
-{
-    "department": "Enterance Security (EST)",
-    "sum": 1962
-},
-{
-    "department": "Essenslieferung_Lj",
-    "sum": 1
-},
-{
-    "department": "Fleisch",
-    "sum": 4137
-},
-{
-    "department": "Fotografie",
-    "sum": 33
-},
-{
-    "department": "Fotografie_Lj",
-    "sum": 2
-},
-{
-    "department": "Gas-Installation",
-    "sum": 736
-},
-{
-    "department": "Green Area_Lj",
-    "sum": 1220
-},
-{
-    "department": "Hazri Nigrani",
-    "sum": 28710
-},
-{
-    "department": "Hazri Nigrani_Lj",
-    "sum": 33306
-},
-{
-    "department": "Health_Safety_Lj",
-    "sum": 14137
-},
-{
-    "department": "Hifazat Parcham",
-    "sum": 531
-},
-{
-    "department": "Hifazat-e-Khas",
-    "sum": 193
-},
-{
-    "department": "Information",
-    "sum": 6
-},
-{
-    "department": "Information_Lj",
-    "sum": 1128
-},
-{
-    "department": "Infostände_Lj",
-    "sum": 39
-},
-{
-    "department": "IT",
-    "sum": 1179
-},
-{
-    "department": "Jalsa_Gah_Security",
-    "sum": 5525
-},
-{
-    "department": "Jalsa_Gah_Security_Lj",
-    "sum": 144
-},
-{
-    "department": "Kartenausgabe",
-    "sum": 2107
-},
-{
-    "department": "Kartenausgabe_Lj",
-    "sum": 536
-},
-{
-    "department": "Khidmat-e-Khalq Bairoon",
-    "sum": 2146
-},
-{
-    "department": "Khidmat-e-Khalq Team",
-    "sum": 6060
-},
-{
-    "department": "Kinderbereich_Lj",
-    "sum": 20209
-},
-{
-    "department": "Kinderwagen_Lj",
-    "sum": 26212
-},
-{
-    "department": "Kommunikation",
-    "sum": 2129
-},
-{
-    "department": "Kontrolle Essen Qualitaet",
-    "sum": 1236
-},
-{
-    "department": "Lager Jalsa Gah",
-    "sum": 1641
-},
-{
-    "department": "Lager Jalsa Salana",
-    "sum": 3561
-},
-{
-    "department": "Lager Langar",
-    "sum": 6567
-},
-{
-    "department": "Lager_Lj",
-    "sum": 53
-},
-{
-    "department": "Lajna Cafe_Lj",
-    "sum": 4255
-},
-{
-    "department": "Lajna Shop_Lj",
-    "sum": 14
-},
-{
-    "department": "Langar 1",
-    "sum": 5445
-},
-{
-    "department": "Langar 2",
-    "sum": 1023
-},
-{
-    "department": "Langar für Auf- u. Abbau",
-    "sum": 2361
-},
-{
-    "department": "Lieferung",
-    "sum": 2
-},
-{
-    "department": "Lieferung_Lj",
-    "sum": 10
-},
-{
-    "department": "Logistik",
-    "sum": 101
-},
-{
-    "department": "Medizinische Versorgung",
-    "sum": 12094
-},
-{
-    "department": "Medizinische Versorgung_Lj",
-    "sum": 7021
-},
-{
-    "department": "Mehman Nawazi",
-    "sum": 1606474
-},
-{
-    "department": "Mehnat_Lj",
-    "sum": 2
-},
-{
-    "department": "Mietgeräte",
-    "sum": 12040
-},
-{
-    "department": "Mitarbeiter Kinderbetreuung_Lj",
-    "sum": 564
-},
-{
-    "department": "Moaina",
-    "sum": 65
-},
-{
-    "department": "Moaina_Lj",
-    "sum": 19
-},
-{
-    "department": "MTA",
-    "sum": 4816
-},
-{
-    "department": "MTA_Lj",
-    "sum": 1
-},
-{
-    "department": "Nazm-o-Zabt",
-    "sum": 123
-},
-{
-    "department": "Nazm-o-Zabt_Lj",
-    "sum": 80168
-},
-{
-    "department": "Nizafat",
-    "sum": 32501
-},
-{
-    "department": "Nizafat Außenbereich_Lj",
-    "sum": 276
-},
-{
-    "department": "Nizafat_Jalsa_Gah_Lj",
-    "sum": 359
-},
-{
-    "department": "Nizafat_WC_Lj",
-    "sum": 931
-},
-{
-    "department": "Office Jalsa Gah",
-    "sum": 6499
-},
-{
-    "department": "Office Jalsa Salana",
-    "sum": 15413
-},
-{
-    "department": "Office Khidmat-e-Khalq",
-    "sum": 12577
-},
-{
-    "department": "Office Langar",
-    "sum": 11177
-},
-{
-    "department": "Office_Lj",
-    "sum": 4174
-},
-{
-    "department": "Office_Ziafat_Lj",
-    "sum": 96
-},
-{
-    "department": "Parking 1",
-    "sum": 975
-},
-{
-    "department": "Perimeter Security (PST)",
-    "sum": 187
-},
-{
-    "department": "Planung Infrastruktur",
-    "sum": 1
-},
-{
-    "department": "Presse",
-    "sum": 170
-},
-{
-    "department": "Presse_Lj",
-    "sum": 320
-},
-{
-    "department": "Programm",
-    "sum": 517
-},
-{
-    "department": "Projektmanagement Office (PMO)",
-    "sum": 5
-},
-{
-    "department": "Rabita Mastoorat",
-    "sum": 1684
-},
-{
-    "department": "Radio_Lj",
-    "sum": 6
-},
-{
-    "department": "Rehaish Khas",
-    "sum": 4158
-},
-{
-    "department": "Reserve 1",
-    "sum": 89884
-},
-{
-    "department": "Reserve 2",
-    "sum": 103884
-},
-{
-    "department": "Sami-O-Basr",
-    "sum": 6298
-},
-{
-    "department": "Sanitäranlagen",
-    "sum": 35
-},
-{
-    "department": "Security",
-    "sum": 1327
-},
-{
-    "department": "Sicherheit Außenbereich_Lj",
-    "sum": 416
-},
-{
-    "department": "Sicherheit Eingangsbereich_Lj",
-    "sum": 57
-},
-{
-    "department": "Sicherheit Hauptbühne_Lj",
-    "sum": 46
-},
-{
-    "department": "Sicherheit technische Anlagen_Lj",
-    "sum": 74
-},
-{
-    "department": "Sicherheitszentrale_Lj",
-    "sum": 534
-},
-{
-    "department": "Social Media",
-    "sum": 1116
-},
-{
-    "department": "Special Needs_Lj",
-    "sum": 2064
-},
-{
-    "department": "Stage",
-    "sum": 2078
-},
-{
-    "department": "Stage Security (SST)",
-    "sum": 80
-},
-{
-    "department": "Statistiken",
-    "sum": 139
-},
-{
-    "department": "Strom",
-    "sum": 6865
-},
-{
-    "department": "Strom_Lj",
-    "sum": 8
-},
-{
-    "department": "Tabligh Gäste",
-    "sum": 11133
-},
-{
-    "department": "Tabligh Meetings",
-    "sum": 1579
-},
-{
-    "department": "Tarbiyyat",
-    "sum": 900
-},
-{
-    "department": "Tarbiyyati Komitee_Lj",
-    "sum": 362
-},
-{
-    "department": "Teestand_Lj",
-    "sum": 86440
-},
-{
-    "department": "Transport",
-    "sum": 144
-},
-{
-    "department": "Übersetzung (Übersetzer)",
-    "sum": 738
-},
-{
-    "department": "Übersetzung Technik",
-    "sum": 4046
-},
-{
-    "department": "Übersetzung_Lj",
-    "sum": 18
-},
-{
-    "department": "Umumi",
-    "sum": 1562
-},
-{
-    "department": "Unterkunft",
-    "sum": 22295
-},
-{
-    "department": "Unterkunft Tabligh Gäste_Lj",
-    "sum": 5061
-},
-{
-    "department": "Unterkunft_Lj",
-    "sum": 6612
-},
-{
-    "department": "Verkehr",
-    "sum": 575
-},
-{
-    "department": "Video_Lj",
-    "sum": 139
-},
-{
-    "department": "Wasserversorgung",
-    "sum": 67016
-},
-{
-    "department": "Wasserversorgung_Lj",
-    "sum": 132466
-},
-{
-    "department": "Zelte",
-    "sum": 879
-},
-{
-    "department": "Ziafat_Disziplin_Lj",
-    "sum": 146
-},
-{
-    "department": "Ziafat_Lj",
-    "sum": 721657
-},
-{
-    "department": "Ziafat_Tabligh_Gäste_Lj",
-    "sum": 38683
-}
+  { "department": "Abbau (Frauenseite)" },
+  { "department": "Abbau (Männerseite)" },
+  { "department": "Abbau Jalsa Salana" },
+  { "department": "Abbau_Lj" },
+  { "department": "AIMS Service" },
+  { "department": "Amanaat" },
+  { "department": "Amanaat_Lj" },
+  { "department": "Anmeldung" },
+  { "department": "Anmeldung_Lj" },
+  { "department": "Ansagen_Lj" },
+  { "department": "Audio_Lj" },
+  { "department": "Auf_Abbau_Langar" },
+  { "department": "Aufbau (Frauenseite)" },
+  { "department": "Aufbau (Männerseite)" },
+  { "department": "Aufbau Jalsa Salana" },
+  { "department": "Aufbau_Lj" },
+  { "department": "Bazaar_Lj" },
+  { "department": "Bazar" },
+  { "department": "Berichtserstattung_Lj" },
+  { "department": "Betreuung Nau Mobaiaat_Lj" },
+  { "department": "Betreuung Tabligh Gäste_Lj" },
+  { "department": "Buecherstand_Lj" },
+  { "department": "Cashier" },
+  { "department": "Chairs Area_Lj" },
+  { "department": "Children Care_Lj" },
+  { "department": "Deg Safai" },
+  { "department": "Dekoration Jalsa Gah" },
+  { "department": "Dekoration Jalsa Salana" },
+  { "department": "Disziplin Außenbereich_Lj" },
+  { "department": "Emergency" },
+  { "department": "Empfang" },
+  { "department": "Empfang_Lj" },
+  { "department": "Enterance Security (EST)" },
+  { "department": "Essenslieferung_Lj" },
+  { "department": "Fleisch" },
+  { "department": "Fotografie" },
+  { "department": "Fotografie_Lj" },
+  { "department": "Gas-Installation" },
+  { "department": "Green Area_Lj" },
+  { "department": "Hazri Nigrani" },
+  { "department": "Hazri Nigrani_Lj" },
+  { "department": "Health_Safety_Lj" },
+  { "department": "Hifazat Parcham" },
+  { "department": "Hifazat-e-Khas" },
+  { "department": "Information" },
+  { "department": "Information_Lj" },
+  { "department": "Infostände_Lj" },
+  { "department": "IT" },
+  { "department": "Jalsa_Gah_Security" },
+  { "department": "Jalsa_Gah_Security_Lj" },
+  { "department": "Kartenausgabe" },
+  { "department": "Kartenausgabe_Lj" },
+  { "department": "Khidmat-e-Khalq Bairoon" },
+  { "department": "Khidmat-e-Khalq Team" },
+  { "department": "Kinderbereich_Lj" },
+  { "department": "Kinderwagen_Lj" },
+  { "department": "Kommunikation" },
+  { "department": "Kontrolle Essen Qualitaet" },
+  { "department": "Lager Jalsa Gah" },
+  { "department": "Lager Jalsa Salana" },
+  { "department": "Lager Langar" },
+  { "department": "Lager_Lj" },
+  { "department": "Lajna Cafe_Lj" },
+  { "department": "Lajna Shop_Lj" },
+  { "department": "Langar 1" },
+  { "department": "Langar 2" },
+  { "department": "Langar für Auf- u. Abbau" },
+  { "department": "Lieferung" },
+  { "department": "Lieferung_Lj" },
+  { "department": "Logistik" },
+  { "department": "Medizinische Versorgung" },
+  { "department": "Medizinische Versorgung_Lj" },
+  { "department": "Mehman Nawazi" },
+  { "department": "Mehnat_Lj" },
+  { "department": "Mietgeräte" },
+  { "department": "Mitarbeiter Kinderbetreuung_Lj" },
+  { "department": "Moaina" },
+  { "department": "Moaina_Lj" },
+  { "department": "MTA" },
+  { "department": "MTA_Lj" },
+  { "department": "Nazm-o-Zabt" },
+  { "department": "Nazm-o-Zabt_Lj" },
+  { "department": "Nizafat" },
+  { "department": "Nizafat Außenbereich_Lj" },
+  { "department": "Nizafat_Jalsa_Gah_Lj" },
+  { "department": "Nizafat_WC_Lj" },
+  { "department": "Office Jalsa Gah" },
+  { "department": "Office Jalsa Salana" },
+  { "department": "Office Khidmat-e-Khalq" },
+  { "department": "Office Langar" },
+  { "department": "Office_Lj" },
+  { "department": "Office_Ziafat_Lj" },
+  { "department": "Parking 1" },
+  { "department": "Perimeter Security (PST)" },
+  { "department": "Planung Infrastruktur" },
+  { "department": "Presse" },
+  { "department": "Presse_Lj" },
+  { "department": "Programm" },
+  { "department": "Projektmanagement Office (PMO)" },
+  { "department": "Rabita Mastoorat" },
+  { "department": "Radio_Lj" },
+  { "department": "Rehaish Khas" },
+  { "department": "Reserve 1" },
+  { "department": "Reserve 2" },
+  { "department": "Sami-O-Basr" },
+  { "department": "Sanitäranlagen" },
+  { "department": "Security" },
+  { "department": "Sicherheit Außenbereich_Lj" },
+  { "department": "Sicherheit Eingangsbereich_Lj" },
+  { "department": "Sicherheit Hauptbühne_Lj" },
+  { "department": "Sicherheit technische Anlagen_Lj" },
+  { "department": "Sicherheitszentrale_Lj" },
+  { "department": "Social Media" },
+  { "department": "Special Needs_Lj" },
+  { "department": "Stage" },
+  { "department": "Stage Security (SST)" },
+  { "department": "Statistiken" },
+  { "department": "Strom" },
+  { "department": "Strom_Lj" },
+  { "department": "Tabligh Gäste" },
+  { "department": "Tabligh Meetings" },
+  { "department": "Tarbiyyat" },
+  { "department": "Tarbiyyati Komitee_Lj" },
+  { "department": "Teestand_Lj" },
+  { "department": "Transport" },
+  { "department": "Übersetzung (Übersetzer)" },
+  { "department": "Übersetzung Technik" },
+  { "department": "Übersetzung_Lj" },
+  { "department": "Umumi" },
+  { "department": "Unterkunft" },
+  { "department": "Unterkunft Tabligh Gäste_Lj" },
+  { "department": "Unterkunft_Lj" },
+  { "department": "Verkehr" },
+  { "department": "Video_Lj" },
+  { "department": "Wasserversorgung" },
+  { "department": "Wasserversorgung_Lj" },
+  { "department": "Zelte" },
+  { "department": "Ziafat_Disziplin_Lj" },
+  { "department": "Ziafat_Lj" },
+  { "department": "Ziafat_Tabligh_Gäste_Lj" }
 ]

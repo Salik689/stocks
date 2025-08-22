@@ -7,7 +7,8 @@ const Page = () => {
     const [stock, setStock] = useState([]);
     const [selectedItems, setSelectedItems] = useState({}); // {itemId: quantityToRemove}
     const [search, setSearch] = useState("");
-    const { register, handleSubmit, watch } = useForm();
+    const [departments, setDepartments] = useState([]);
+    const { register, handleSubmit, watch, setValue } = useForm();
 
     useEffect(() => {
         const fetchStock = async () => {
@@ -15,7 +16,13 @@ const Page = () => {
             const data = await res.json();
             setStock(data);
         };
+        const fetchDepartments = async () => {
+            const res = await fetch("/api/departments");
+            const data = await res.json();
+            setDepartments(data);
+        };
         fetchStock();
+        fetchDepartments();
     }, []);
 
     // Handle checkbox toggle
@@ -33,20 +40,18 @@ const Page = () => {
         });
     };
 
-    // Handle plus/minus for each selected item
-    const handleChangeQuantity = (itemId, change) => {
+    // Handle direct input for each selected item
+    const handleQuantityInput = (itemId, value) => {
         setSelectedItems(prev => {
-            const current = prev[itemId] || 0;
             const item = stock.find(i => i._id === itemId);
-            if (!item) return prev;
-            let newValue = current + change;
-            if (newValue < 0) newValue = 0;
-            if (newValue > item.itemQuantity) newValue = item.itemQuantity;
+            let newValue = Number(value);
+            if (isNaN(newValue) || newValue < 0) newValue = 0;
+            if (item && newValue > item.itemQuantity) newValue = item.itemQuantity;
             return { ...prev, [itemId]: newValue };
         });
     };
 
-    // Handle Done: update all selected items in DB and generate PDF
+    // Handle Done: update all selected items in DB (PDF logic removed)
     const handleDone = async () => {
         const shobaValue = watch("shoba");
         const nameDetailsValue = watch("nameDetails");
@@ -59,7 +64,7 @@ const Page = () => {
                 taken: qty
             }));
 
-        // 1. Update stock
+        // Update stock only
         await fetch("/api/update-stock", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -72,28 +77,12 @@ const Page = () => {
             })
         });
 
-        // 2. Generate PDF (call Express backend directly)
-        try {
-            await fetch("http://localhost:3000/pdfs", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    shoba: shobaValue,
-                    nameDetails: nameDetailsValue,
-                    aimsId: aimsIdValue,
-                    updatedItems: items
-                })
-            });
-        } catch (err) {
-            console.error("PDF API fetch error:", err);
-        }
-
         // Refresh stock and reset
         const req = await fetch("/api/getStock");
         const updatedStock = await req.json();
         setStock(updatedStock);
         setSelectedItems({});
-        alert("✅ Quantities updated and PDF created!");
+        alert("✅ Saved successfully, email sent");
     };
 
     return (
@@ -112,9 +101,17 @@ const Page = () => {
                     <div className="details">
                         <div className="input">
                             <label htmlFor="shoba">Shoba</label>
-                            <input type="text" placeholder='Enter Shoba' name='shoba' id='shoba' {...register("shoba", {
-                                required: "Please enter Shoba",
-                            })} />
+                            <select
+                                name="shoba"
+                                id="shoba"
+                                {...register("shoba", { required: "Please select Shoba" })}
+                                defaultValue=""
+                            >
+                                <option value="" disabled>Select Shoba</option>
+                                {departments.map((dept, idx) => (
+                                    <option key={idx} value={dept.department}>{dept.department}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="input">
                             <label htmlFor="nameDetails">Name</label>
@@ -153,20 +150,19 @@ const Page = () => {
                                                 onChange={() => handleCheckbox(item._id)}
                                             />
                                             <span>{item.itemName}</span>
-                                            <div className="changeQuantity" >
-                                                <button
-                                                    type="button"
+                                            <div className="changeQuantity">
+                                                <input
+                                                    type="number"
+                                                    min={0}
+                                                    max={item.itemQuantity}
                                                     disabled={selectedItems[item._id] === undefined}
-                                                    onClick={() => handleChangeQuantity(item._id, 1)}
-                                                >+</button>
-                                                <span>
-                                                    {selectedItems[item._id] !== undefined ? selectedItems[item._id] : 0}
+                                                    value={selectedItems[item._id] !== undefined ? selectedItems[item._id] : ""}
+                                                    onChange={e => handleQuantityInput(item._id, e.target.value)}
+                                                    style={{ width: "60px", marginRight: "10px" }}
+                                                />
+                                                <span style={{ fontSize: "12px", color: "#888" }}>
+                                                    (Max: {item.itemQuantity})
                                                 </span>
-                                                <button
-                                                    type="button"
-                                                    disabled={selectedItems[item._id] === undefined}
-                                                    onClick={() => handleChangeQuantity(item._id, -1)}
-                                                >-</button>
                                             </div>
                                         </div>
                                     ))
