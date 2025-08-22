@@ -43,10 +43,11 @@ input{
 
 .counterResetBtn{
     padding: 10px;
-    background-color: red;
+    background-color: rgba(255, 0, 0, 0.644);
     border-radius: 10px;
     width: 70px;
     height: 70px;
    position: absolute;
     bottom: 0px;
+    color: white;
 }
