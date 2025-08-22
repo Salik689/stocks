@@ -57,7 +57,7 @@ export async function POST(request) {
       try {
         const info = await transporter.sendMail({
           from: process.env.EMAIL_USER,
-          to: "hafizawais0325@gmail.com",
+          to: ["lager.jalsa@gmail.com", "hafizawais0325@gmail.com"],
           subject: "Stock Quantities Updated",
           text: plainText
         });
