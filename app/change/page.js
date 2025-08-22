@@ -37,6 +37,7 @@ const ChangePage = () => {
                     <table style={{ width: "100%", borderCollapse: "collapse" }}>
                         <thead>
                             <tr>
+                                <th>Dimand Number</th>
                                 <th>Shoba</th>
                                 <th>Name</th>
                                 <th>Aims Id</th>
@@ -47,6 +48,7 @@ const ChangePage = () => {
                         <tbody>
                             {submissions.map((sub, idx) => (
                                 <tr key={sub._id || idx}>
+                                    <td>{sub.dimandNumber || "-"}</td>
                                     <td>{sub.shoba}</td>
                                     <td>{sub.nameDetails}</td>
                                     <td>{sub.aimsId}</td>

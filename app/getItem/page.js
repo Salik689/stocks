@@ -116,13 +116,13 @@ const Page = () => {
                         <div className="input">
                             <label htmlFor="nameDetails">Name</label>
                             <input type="text" placeholder='Enter your name' name='nameDetails' id='nameDetails' {...register("nameDetails", {
-                                required: "Please enter name",
+                                required: "Please enter your name",
                             })} />
                         </div>
                         <div className="input">
                             <label htmlFor="aimsId">Aims Id</label>
                             <input type="text" placeholder='Enter aimsId' name='aimsId' id='aimsId' {...register("aimsId", {
-                                required: "Please enter Aims Id",
+                                required: "Please enter your Aims Id",
                             })} />
                         </div>
                     </div>

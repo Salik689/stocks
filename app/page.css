@@ -40,3 +40,13 @@ input{
     border-radius: 20px;
     background-color: rgb(0, 128, 0,0.6);
 }
+
+.counterResetBtn{
+    padding: 10px;
+    background-color: red;
+    border-radius: 10px;
+    width: 70px;
+    height: 70px;
+   position: absolute;
+    bottom: 0px;
+}

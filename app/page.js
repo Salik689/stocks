@@ -37,6 +37,20 @@ export default function Home() {
 
     }
   }
+  // Reset counter handler
+  const handleResetCounter = async () => {
+    try {
+      const res = await fetch("/api/reset-counter", { method: "POST" });
+      if (res.ok) {
+        alert("Counter reset to 0");
+      } else {
+        alert("Failed to reset counter");
+      }
+    } catch (err) {
+      alert("Error resetting counter");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -63,7 +77,7 @@ export default function Home() {
             name="itemQuantity"
             id="itemQuantity"
             {...register("itemQuantity", {
-
+              
             })}
           />
           </div>
@@ -75,7 +89,7 @@ export default function Home() {
             name="number"
             id="number"
             {...register("Number", {
-
+              
             })}
           />
 
@@ -88,7 +102,7 @@ export default function Home() {
             name="itemLocation"
             id="itemLocation"
             {...register("itemLocation", {
-
+              
             })}
           />
         </div>
@@ -97,6 +111,7 @@ export default function Home() {
         </div>
       </form>
       
+            <button type="button" className="counterResetBtn" onClick={handleResetCounter}>Reset Counter</button>
       </div>
       
     </>
