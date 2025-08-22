@@ -31,8 +31,17 @@ export async function POST(request) {
       });
     }
 
-    // Prepare plain text for email
-    const plainText = `Stock update completed.\n\nShoba: ${shoba || "N/A"}\nName: ${nameDetails || "N/A"}\nAims Id: ${aimsId || "N/A"}\n\nUpdated Items:\n${updatedItems.map(item => 
+
+    // Get and increment the email counter
+    const counterDoc = await db.collection("counters").findOneAndUpdate(
+      { _id: "emailCounter" },
+      { $inc: { count: 1 } },
+      { upsert: true, returnDocument: "after" }
+    );
+    const emailCount = counterDoc.value?.count || 1;
+
+    // Prepare plain text for email with Dimand number
+    const plainText = `Stock update completed.\n\nDimand number: ${emailCount}\nShoba: ${shoba || "N/A"}\nName: ${nameDetails || "N/A"}\nAims Id: ${aimsId || "N/A"}\n\nUpdated Items:\n${updatedItems.map(item => 
       `- ${item.itemName || "Unknown"} | Taken: ${item.taken ?? 0} | Left: ${item.itemQuantity ?? 0}`
     ).join("\n")}`;
 
@@ -58,7 +67,8 @@ export async function POST(request) {
       }
     }
 
-    // Store all relevant submission data in MongoDB
+
+    // Store all relevant submission data in MongoDB, including the email count
     await db.collection('submissions').insertOne({
       shoba,
       nameDetails,
@@ -66,6 +76,7 @@ export async function POST(request) {
       items,
       updatedItems,
       emailBody: plainText,
+      dimandNumber: emailCount,
       createdAt: new Date()
     });
 
