@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Navbar from '../components/Navbar';
+import "./change.css";
 const ChangePage = () => {
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ const ChangePage = () => {
     return (
         <>
             <Navbar />
-            <div style={{ padding: "20px" }}>
+            <div className="submitionsPage" style={{ padding: "20px" }}>
                 <h2>Submissions</h2>
                 {submissions.length === 0 ? (
                     <div>No submissions found.</div>
