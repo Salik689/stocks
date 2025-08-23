@@ -170,7 +170,7 @@ const Page = () => {
                                                 min={0}
                                                 max={item.itemQuantity}
                                                 disabled={selectedItems[item._id] === undefined}
-                                                value={selectedItems[item._id] !== undefined ? selectedItems[item._id] : ""}
+                                                value={selectedItems[item._id] !== undefined && selectedItems[item._id] !== 0 ? selectedItems[item._id] : ""}
                                                 onChange={e => handleQuantityInput(item._id, e.target.value)}
                                                 style={{ width: "60px", marginRight: "10px" }}
                                             />
