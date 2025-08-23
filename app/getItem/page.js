@@ -5,9 +5,11 @@ import './getItem.css';
 
 const Page = () => {
     const [stock, setStock] = useState([]);
-    const [selectedItems, setSelectedItems] = useState({}); // {itemId: quantityToRemove}
+    const [selectedItems, setSelectedItems] = useState({});
     const [search, setSearch] = useState("");
     const [departments, setDepartments] = useState([]);
+    const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { register, handleSubmit, watch, setValue } = useForm();
 
     useEffect(() => {
@@ -25,22 +27,18 @@ const Page = () => {
         fetchDepartments();
     }, []);
 
-    // Handle checkbox toggle
     const handleCheckbox = (itemId) => {
         setSelectedItems(prev => {
             if (Object.prototype.hasOwnProperty.call(prev, itemId)) {
-                // Unselect: remove from selected
                 const copy = { ...prev };
                 delete copy[itemId];
                 return copy;
             } else {
-                // Select: add with initial quantity 0
                 return { ...prev, [itemId]: 0 };
             }
         });
     };
 
-    // Handle direct input for each selected item
     const handleQuantityInput = (itemId, value) => {
         setSelectedItems(prev => {
             const item = stock.find(i => i._id === itemId);
@@ -51,8 +49,9 @@ const Page = () => {
         });
     };
 
-    // Handle Done: update all selected items in DB (PDF logic removed)
     const handleDone = async () => {
+        setLoading(true);
+        setSuccess(false);
         const shobaValue = watch("shoba");
         const nameDetailsValue = watch("nameDetails");
         const aimsIdValue = watch("aimsId");
@@ -64,7 +63,6 @@ const Page = () => {
                 taken: qty
             }));
 
-        // Update stock only
         await fetch("/api/update-stock", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -82,20 +80,28 @@ const Page = () => {
         const updatedStock = await req.json();
         setStock(updatedStock);
         setSelectedItems({});
-        alert("✅ Saved successfully, email sent");
+        setSuccess(true);
+        setLoading(false);
     };
 
     return (
         <>
             <div className="saveNav">
-                <button
-                    className="done"
-                    type="button"
-                    onClick={handleDone}
-                    disabled={Object.values(selectedItems).every(qty => qty === 0)}>
-                    ✅ Save all
-                </button>
+                {!success && (
+                    <button
+                        className="done"
+                        type="button"
+                        onClick={handleDone}
+                        disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}>
+                        ✅ Save all
+                    </button>
+                )}
             </div>
+            {success && (
+                <div className="success" style={{ color: "green", textAlign: "center", margin: "10px 0" }} >
+                    ✅ Saved successfully, email sent!
+                </div>
+            )}
             <div className="getItemsPage" >
                 <form>
                     <div className="details">
@@ -172,13 +178,15 @@ const Page = () => {
                             ) : null
                         )}
                     </div>
-                    <button
-                        className="done"
-                        type="button"
-                        onClick={handleDone}
-                        disabled={Object.values(selectedItems).every(qty => qty === 0)}>
-                        ✅ Save all
-                    </button>
+                    {!success && (
+                        <button
+                            className="done"
+                            type="button"
+                            onClick={handleDone}
+                            disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}>
+                            ✅ Save all
+                        </button>
+                    )}
                 </form>
             </div>
         </>
