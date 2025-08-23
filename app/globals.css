@@ -33,7 +33,8 @@ body{
 
 background-repeat: no-repeat; 
 
-background-image: linear-gradient(136deg, rgba(49, 140, 3, 1) 0%, rgba(39, 156, 0, 1) 100%);
+/* background-image: linear-gradient(136deg, rgba(49, 140, 3, 1) 0%, rgba(39, 156, 0, 1) 100%); */
+background-image: linear-gradient(to bottom right, #d4fc79, #96e6a1);
 height: 100vh;
 background-position: center;
 background-size: cover;
