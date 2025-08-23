@@ -19,11 +19,19 @@ app.post('/', async (req, res) => {
     const db = client.db('inventory');
     const collection = db.collection('stock');
 
-    // Save form data
+    // Save form data (if needed, or update stock as per your logic)
     await collection.insertOne(formData);
 
-    // Prepare plain text for email
-    const plainText = `Stock update completed.\n\nShoba: ${formData.shoba || "N/A"}\nName: ${formData.nameDetails || "N/A"}\nAims Id: ${formData.aimsId || "N/A"}\n\nUpdated Items:\n${formData.items?.map(item =>
+    // Increment the email counter in 'counters' collection
+    const counterDoc = await db.collection('counters').findOneAndUpdate(
+      { _id: 'emailCounter' },
+      { $inc: { count: 1 } },
+      { upsert: true, returnDocument: 'after' }
+    );
+    const emailCount = counterDoc.value?.count || 1;
+
+    // Prepare plain text for email with Dimand number
+    const plainText = `Stock update completed.\n\nDimand number: ${emailCount}\nShoba: ${formData.shoba || "N/A"}\nName: ${formData.nameDetails || "N/A"}\nAims Id: ${formData.aimsId || "N/A"}\n\nUpdated Items:\n${formData.items?.map(item =>
       `- ${item.itemName || "Unknown"} | Taken: ${item.taken ?? 0} | Left: ${item.itemQuantity ?? 0}`
     ).join("\n")}`;
 
@@ -49,7 +57,15 @@ app.post('/', async (req, res) => {
       console.error("Failed to send email:", emailErr);
     }
 
-    res.status(200).json({ message: "Stock updated and email sent." });
+    // Store all relevant submission data in MongoDB, including the email count
+    await db.collection('submissions').insertOne({
+      ...formData,
+      emailBody: plainText,
+      dimandNumber: emailCount,
+      createdAt: new Date()
+    });
+
+    res.status(200).json({ message: "Stock updated and email sent.", dimandNumber: emailCount });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

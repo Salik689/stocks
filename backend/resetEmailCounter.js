@@ -3,7 +3,7 @@ import clientPromise from "./lib/mongodb.js";
 async function resetEmailCounter() {
   const client = await clientPromise;
   const db = client.db("inventory");
-  await db.collection("submissions").updateOne(
+  await db.collection("counters").updateOne(
     { _id: "emailCounter" },
     { $set: { count: 0 } },
     { upsert: true }

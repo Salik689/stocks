@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import './getItem.css';
 
 const Page = () => {
@@ -10,7 +10,9 @@ const Page = () => {
     const [departments, setDepartments] = useState([]);
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { register, handleSubmit, watch, setValue } = useForm();
+    const [demandNumber, setDemandNumber] = useState(null); // demand number state
+
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     useEffect(() => {
         const fetchStock = async () => {
@@ -18,11 +20,13 @@ const Page = () => {
             const data = await res.json();
             setStock(data);
         };
+
         const fetchDepartments = async () => {
             const res = await fetch("/api/departments");
             const data = await res.json();
             setDepartments(data);
         };
+
         fetchStock();
         fetchDepartments();
     }, []);
@@ -49,12 +53,14 @@ const Page = () => {
         });
     };
 
-    const handleDone = async () => {
+    const handleDone = async (data) => {
         setLoading(true);
         setSuccess(false);
+
         const shobaValue = watch("shoba");
         const nameDetailsValue = watch("nameDetails");
         const aimsIdValue = watch("aimsId");
+
         const items = Object.entries(selectedItems)
             .filter(([id, qty]) => qty > 0)
             .map(([id, qty]) => ({
@@ -63,25 +69,30 @@ const Page = () => {
                 taken: qty
             }));
 
-        await fetch("/api/update-stock", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                items,
-                done: true,
-                shoba: shobaValue,
-                nameDetails: nameDetailsValue,
-                aimsId: aimsIdValue
-            })
-        });
-
-        // Refresh stock and reset
-        const req = await fetch("/api/getStock");
-        const updatedStock = await req.json();
-        setStock(updatedStock);
-        setSelectedItems({});
-        setSuccess(true);
-        setLoading(false);
+        try {
+            const res = await fetch("/api/update-stock", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items,
+                    done: true,
+                    shoba: shobaValue,
+                    nameDetails: nameDetailsValue,
+                    aimsId: aimsIdValue
+                })
+            });
+            const result = await res.json();
+            setDemandNumber(result.dimandNumber);
+            const req = await fetch("/api/getStock");
+            const updatedStock = await req.json();
+            setStock(updatedStock);
+            setSelectedItems({});
+            setSuccess(true);
+        } catch (err) {
+            console.error("Error saving submission:", err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -90,20 +101,21 @@ const Page = () => {
                 {!success && (
                     <button
                         className="done"
-                        type="button"
-                        onClick={handleDone}
-                        disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}>
+                        type="submit"
+                        form="get-items-form"
+                        disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}
+                    >
                         ✅ Save all
                     </button>
                 )}
             </div>
             {success && (
                 <div className="success" style={{ color: "green", textAlign: "center", margin: "10px 0" }} >
-                    ✅ Saved successfully, email sent!
+                    ✅ Saved successfully! Demand Number: <b>{demandNumber}</b>
                 </div>
             )}
-            <div className="getItemsPage" >
-                <form>
+            <div className="getItemsPage">
+                <form id="get-items-form" onSubmit={handleSubmit(handleDone)}>
                     <div className="details">
                         <div className="input">
                             <label htmlFor="shoba">Shoba</label>
@@ -118,18 +130,17 @@ const Page = () => {
                                     <option key={idx} value={dept.department}>{dept.department}</option>
                                 ))}
                             </select>
+                            {errors.shoba && <span style={{ color: 'red' }}>{errors.shoba.message}</span>}
                         </div>
                         <div className="input">
                             <label htmlFor="nameDetails">Name</label>
-                            <input type="text" placeholder='Enter your name' name='nameDetails' id='nameDetails' {...register("nameDetails", {
-                                required: "Please enter your name",
-                            })} />
+                            <input type="text" placeholder='Enter your name' {...register("nameDetails", { required: "Please enter your name" })} />
+                            {errors.nameDetails && <span style={{ color: 'red' }}>{errors.nameDetails.message}</span>}
                         </div>
                         <div className="input">
                             <label htmlFor="aimsId">Aims Id</label>
-                            <input type="text" placeholder='Enter aimsId' name='aimsId' id='aimsId' {...register("aimsId", {
-                                required: "Please enter your Aims Id",
-                            })} />
+                            <input type="text" placeholder='Enter aimsId' {...register("aimsId", { required: "Please enter your Aims Id", pattern: { value: /^\d{1,5}$/, message: "Aims ID must be a number with up to 5 digits" } })} />
+                            {errors.aimsId && <span style={{ color: 'red' }}>{errors.aimsId.message}</span>}
                         </div>
                     </div>
                     <div className="searchBar">
@@ -140,53 +151,40 @@ const Page = () => {
                             onChange={e => setSearch(e.target.value)}
                         />
                     </div>
-                    <div className="listOFitems" >
+                    <div className="listOFitems">
                         {search.trim() === "" ? null : (
                             Array.isArray(stock) && stock.length > 0 ? (
                                 stock.filter(item =>
                                     item.itemName && item.itemName.toLowerCase().includes(search.toLowerCase())
-                                ).length > 0 ? (
-                                    stock.filter(item =>
-                                        item.itemName && item.itemName.toLowerCase().includes(search.toLowerCase())
-                                    ).map((item, idx) => (
-                                        <div className="item" key={item._id || idx}>
+                                ).map((item, idx) => (
+                                    <div className="item" key={item._id || idx}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedItems[item._id] !== undefined}
+                                            onChange={() => handleCheckbox(item._id)}
+                                        />
+                                        <span>{item.itemName}</span>
+                                        <div className="changeQuantity">
                                             <input
-                                                type="checkbox"
-                                                checked={selectedItems[item._id] !== undefined}
-                                                onChange={() => handleCheckbox(item._id)}
+                                                type="number"
+                                                min={0}
+                                                max={item.itemQuantity}
+                                                disabled={selectedItems[item._id] === undefined}
+                                                value={selectedItems[item._id] !== undefined ? selectedItems[item._id] : ""}
+                                                onChange={e => handleQuantityInput(item._id, e.target.value)}
+                                                style={{ width: "60px", marginRight: "10px" }}
                                             />
-                                            <span>{item.itemName}</span>
-                                            <div className="changeQuantity">
-                                                <input
-                                                    type="number"
-                                                    min={0}
-                                                    max={item.itemQuantity}
-                                                    disabled={selectedItems[item._id] === undefined}
-                                                    value={selectedItems[item._id] !== undefined ? selectedItems[item._id] : ""}
-                                                    onChange={e => handleQuantityInput(item._id, e.target.value)}
-                                                    style={{ width: "60px", marginRight: "10px" }}
-                                                />
-                                                <span style={{ fontSize: "12px", color: "#888" }}>
-                                                    (Max: {item.itemQuantity})
-                                                </span>
-                                            </div>
+                                            <span style={{ fontSize: "12px", color: "#888" }}>
+                                                (Max: {item.itemQuantity})
+                                            </span>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div>No items found</div>
-                                )
-                            ) : null
+                                    </div>
+                                ))
+                            ) : (
+                                <div>No items found</div>
+                            )
                         )}
                     </div>
-                    {!success && (
-                        <button
-                            className="done"
-                            type="button"
-                            onClick={handleDone}
-                            disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}>
-                            ✅ Save all
-                        </button>
-                    )}
                 </form>
             </div>
         </>
