@@ -63,7 +63,7 @@ li a {
 }
 
 /* Mobile override */
-@media (max-width: 780px) {
+@media (max-width: 1110px) {
 
     /* Slide-over panel from the right */
     .mobile-nav {

@@ -7,6 +7,7 @@ export default function NotesPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [allNotes, setAllNotes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchNotes();
@@ -53,11 +54,26 @@ export default function NotesPage() {
     }
   };
 
+  // Filter notes based on search query
+  const filteredNotes = allNotes.filter(note => 
+    note.shoba.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
     <Navbar />
     <div style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
       <h1>📝 Notes</h1>
+      
+      <div style={{ marginBottom: '1rem' }}>
+        <input
+          type="text"
+          placeholder="Search by Shoba..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem', borderRadius: '4px', border: '1px solid #ccc' }}
+        />
+      </div>
 
       <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <input
@@ -90,8 +106,8 @@ export default function NotesPage() {
     </tr>
   </thead>
   <tbody>
-    {Array.isArray(allNotes) && allNotes.length > 0 ? (
-      allNotes.map((note) => (
+    {Array.isArray(filteredNotes) && filteredNotes.length > 0 ? (
+      filteredNotes.map((note) => (
         <tr key={note._id}>
           <td style={{ borderBottom: '1px solid #000000ff', padding: '0.5rem' }}>{note.shoba}</td>
           <td style={{ borderBottom: '1px solid #000000ff', padding: '0.5rem' }}>{note.notes}</td>

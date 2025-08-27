@@ -8,6 +8,7 @@ const ChangePage = () => {
   const [nextDimandNumber, setNextDimandNumber] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,21 +41,36 @@ const ChangePage = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  // Filter submissions based on search query
+  const filteredSubmissions = submissions.filter(sub =>
+    sub.shoba && sub.shoba.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       <Navbar />
       <div className="submitionsPage" style={{ padding: "20px" }}>
         <h2>Submissions</h2>
         <div style={{ marginBottom: "16px", fontWeight: "bold" }}>
-        Dimand Number: {nextDimandNumber !== null ? nextDimandNumber : "-"}
+          Dimand Number: {nextDimandNumber !== null ? nextDimandNumber : "-"}
         </div>
-        {submissions.length === 0 ? (
+
+        <div style={{ marginBottom: '1rem' }}>
+          <input
+            type="text"
+            placeholder="Search by Shoba..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          />
+        </div>
+        {filteredSubmissions.length === 0 ? (
           <div>No submissions found.</div>
         ) : (
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr>
-               
+
                 <th>Shoba</th>
                 <th>Name</th>
                 <th>Aims Id</th>
@@ -63,9 +79,9 @@ const ChangePage = () => {
               </tr>
             </thead>
             <tbody>
-              {submissions.map((sub, idx) => (
+              {filteredSubmissions.map((sub, idx) => (
                 <tr key={sub._id || idx}>
-                 
+
                   <td>{sub.shoba}</td>
                   <td>{sub.nameDetails}</td>
                   <td>{sub.aimsId}</td>
