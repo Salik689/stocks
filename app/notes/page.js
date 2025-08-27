@@ -56,7 +56,7 @@ export default function NotesPage() {
   return (
     <>
     <Navbar />
-    <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto' }}>
+    <div style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
       <h1>📝 Notes</h1>
 
       <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -72,8 +72,11 @@ export default function NotesPage() {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           required
+          style={{ minHeight: '100px' }}
         />
-        <button type="submit">Save Note</button>
+        <button type="submit" style={{ padding: '0.5rem', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+          Save Note
+        </button>
       </form>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}

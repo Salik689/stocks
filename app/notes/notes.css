@@ -1,41 +1,44 @@
-.notesPage{
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-  
-    align-items: center;    
-    flex-direction: column;
-}
-form{
-    margin: 10px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-flex-direction: column;
-    gap: 10px;
-}
-input{
-    padding: 10px;
-    border-radius: 10px;
-    width: 300px;
+/* Since we're using inline styles in the page.js file, this CSS file is no longer needed */
+/* Keeping it for reference but styles are now defined inline in the component */
 
+/* The following styles match what's used in the returnItems page */
+
+input {
+    padding: 0.5rem;
+    border-radius: 4px;
+    width: 100%;
+    border: 1px solid #ccc;
 }
-textarea    {
-    padding: 10px;
-    border-radius: 10px;
-    width: 300px;
-    height: 100px;
+
+textarea {
+    padding: 0.5rem;
+    border-radius: 4px;
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid #ccc;
 }
-.submitNotesBtn{
-    padding: 10px 20px;
-    border-radius: 10px;
-    background-color: #06a700;
+
+button[type="submit"] {
+    padding: 0.5rem;
+    background-color: #4CAF50;
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
 }
-.allNotesList{
-    position: absolute;
-    left: 10px;
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+table {
+    margin-top: 2rem;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border-bottom: 1px solid #000000ff;
+    text-align: left;
+    padding: 0.5rem;
 }
