@@ -37,19 +37,7 @@ export default function Home() {
 
     }
   }
-  // Reset counter handler
-  const handleResetCounter = async () => {
-    try {
-      const res = await fetch("/api/reset-counter", { method: "POST" });
-      if (res.ok) {
-        alert("Counter reset to 0");
-      } else {
-        alert("Failed to reset counter");
-      }
-    } catch (err) {
-      alert("Error resetting counter");
-    }
-  };
+  // Form submission handler above
 
   return (
     <>
@@ -110,8 +98,6 @@ export default function Home() {
           <button className="submitBtn" type="submit" >Submit</button>
         </div>
       </form>
-      
-            <button type="button" className="counterResetBtn" onClick={handleResetCounter}>Reset Counter</button>
       </div>
       
     </>
