@@ -67,29 +67,30 @@ const ChangePage = () => {
         {filteredSubmissions.length === 0 ? (
           <div>No submissions found.</div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #ddd" }}>
             <thead>
-              <tr>
-
-                <th>Shoba</th>
-                <th>Name</th>
-                <th>Aims Id</th>
-                <th>Date</th>
-                <th>Items</th>
+              <tr style={{ backgroundColor: "#f2f2f2" }}>
+                <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #000000", borderRight: "1px solid #ddd" }}>Shoba</th>
+                <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #000000", borderRight: "1px solid #ddd" }}>Name</th>
+                <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #000000", borderRight: "1px solid #ddd" }}>Aims Id</th>
+                <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #000000", borderRight: "1px solid #ddd" }}>Date</th>
+                <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #000000" }}>Items</th>
               </tr>
             </thead>
             <tbody>
               {filteredSubmissions.map((sub, idx) => (
-                <tr key={sub._id || idx}>
-
-                  <td>{sub.shoba}</td>
-                  <td>{sub.nameDetails}</td>
-                  <td>{sub.aimsId}</td>
-                  <td>{sub.createdAt ? new Date(sub.createdAt).toLocaleString() : ""}</td>
-                  <td>
-                    <ul>
+                <tr key={sub._id || idx} style={{ 
+                  backgroundColor: idx % 2 === 0 ? "#ffffff" : "#f9f9f9",
+                  borderBottom: "1px solid #ddd"
+                }}>
+                  <td style={{ padding: "10px", borderRight: "1px solid #ddd" }}>{sub.shoba}</td>
+                  <td style={{ padding: "10px", borderRight: "1px solid #ddd" }}>{sub.nameDetails}</td>
+                  <td style={{ padding: "10px", borderRight: "1px solid #ddd" }}>{sub.aimsId}</td>
+                  <td style={{ padding: "10px", borderRight: "1px solid #ddd" }}>{sub.createdAt ? new Date(sub.createdAt).toLocaleString() : ""}</td>
+                  <td style={{ padding: "10px" }}>
+                    <ul style={{ margin: "0", paddingLeft: "20px" }}>
                       {(sub.updatedItems || []).map((item, i) => (
-                        <li key={i}>
+                        <li key={i} style={{ marginBottom: "5px" }}>
                           {item.itemName} (Taken: {item.taken}, Left: {item.itemQuantity})
                         </li>
                       ))}
