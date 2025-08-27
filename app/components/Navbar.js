@@ -38,7 +38,8 @@ export default function Navbar() {
                     <Link href={"/displaystock"}><li>Display Stock</li></Link>
                     <Link href={"/demand"}><li>Demand</li></Link>
                     <Link href={"/change"}><li>Submitions</li></Link>
-                    <Link href={"/notes"}><li>Notes</li></Link>
+                    <Link href={"/notes"}><li>Notes for extra items</li></Link>
+                    <Link href={"/returnItems"}><li>Notes for return items</li></Link>
 
 
                 </ul>
