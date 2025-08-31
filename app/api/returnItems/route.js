@@ -20,7 +20,7 @@ export async function POST(request) {
     const client = await clientPromise;
     const db = client.db(dbName);
 
-    // Save the return submission
+    // Save the return submission to returnItems collection
     await db.collection('returnItems').insertOne({
       name: name.trim(),
       aimsId: aimsId.trim(),
@@ -35,7 +35,7 @@ export async function POST(request) {
 
       await db.collection('stock').updateOne(
         { _id: new ObjectId(item.itemId) },
-        { $inc: { itemQuantity: item.returned } } // Increment quantity
+        { $inc: { itemQuantity: item.returned } }
       );
     }
 
@@ -52,7 +52,7 @@ export async function POST(request) {
   }
 }
 
-// GET: Fetch all return submissions
+// GET: Fetch all return submissions from returnItems collection
 export async function GET() {
   try {
     const client = await clientPromise;
