@@ -11,15 +11,9 @@ const Page = () => {
   const [search, setSearch] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [demandNumber, setDemandNumber] = useState(null);
   const [returnedItems, setReturnedItems] = useState([]);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
     const fetchStock = async () => {
@@ -84,7 +78,7 @@ const Page = () => {
       }));
 
     try {
-      const res = await fetch("/api/update-stock", {
+      await fetch("/api/update-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -96,8 +90,6 @@ const Page = () => {
         })
       });
 
-      const result = await res.json();
-      setDemandNumber(result.dimandNumber);
       const updatedStock = await (await fetch("/api/getStock")).json();
       setStock(updatedStock);
       setSelectedItems({});
@@ -131,7 +123,7 @@ const Page = () => {
 
       {success && (
         <div className="success">
-          ✅ Items returned successfully! Reference Number: <b>{demandNumber}</b>
+          ✅ Items returned successfully!
         </div>
       )}
 
@@ -226,7 +218,6 @@ const Page = () => {
           </div>
         </form>
 
-        {/* Return History Table */}
         <div className="returnedItemsTable">
           <h2>📋 Returned Items History</h2>
           <table>

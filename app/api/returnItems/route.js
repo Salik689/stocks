@@ -1,7 +1,7 @@
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-const dbName = 'inventory'; // Your database name
+const dbName = 'inventory';
 
 // POST: Save return submission and update stock quantities
 export async function POST(request) {
@@ -31,11 +31,11 @@ export async function POST(request) {
 
     // Update stock quantities for each returned item
     for (const item of items) {
-      if (!item.itemId || typeof item.taken !== 'number') continue;
+      if (!item.itemId || typeof item.returned !== 'number') continue;
 
       await db.collection('stock').updateOne(
         { _id: new ObjectId(item.itemId) },
-        { $inc: { itemQuantity: item.taken } } // Increment quantity
+        { $inc: { itemQuantity: item.returned } } // Increment quantity
       );
     }
 
