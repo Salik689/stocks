@@ -1,232 +1,214 @@
 'use client';
-import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import './getItem.css'; // You can rename this to returnItem.css if needed
 
-export default function ReturnItemsPage() {
-  // Form fields
-  const [name, setName] = useState('');
-  const [aimsId, setAimsId] = useState('');
-  const [shoba, setShoba] = useState('');
-
-  // Stock and item selection
+const Page = () => {
   const [stock, setStock] = useState([]);
   const [selectedItems, setSelectedItems] = useState({});
-  const [searchQuery, setSearchQuery] = useState('');
+  const [search, setSearch] = useState("");
+  const [departments, setDepartments] = useState([]);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [demandNumber, setDemandNumber] = useState(null);
 
-  // Feedback and return history
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [allReturns, setAllReturns] = useState([]);
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
-    fetchReturnItems();
+    const fetchStock = async () => {
+      const res = await fetch("/api/getStock");
+      const data = await res.json();
+      setStock(data);
+    };
+
+    const fetchDepartments = async () => {
+      const res = await fetch("/api/departments");
+      const data = await res.json();
+      setDepartments(data);
+    };
+
     fetchStock();
+    fetchDepartments();
   }, []);
-
-  const fetchReturnItems = async () => {
-    try {
-      const res = await fetch('/api/returnItems');
-      const data = await res.json();
-      if (!Array.isArray(data)) throw new Error('Invalid response format');
-      setAllReturns(data);
-    } catch (err) {
-      console.error('❌ Fetch error:', err);
-      setAllReturns([]);
-    }
-  };
-
-  const fetchStock = async () => {
-    try {
-      const res = await fetch('/api/getStock');
-      const data = await res.json();
-      setStock(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error('❌ Stock fetch error:', err);
-      setStock([]);
-    }
-  };
 
   const handleCheckbox = (itemId) => {
     setSelectedItems(prev => {
-      const updated = { ...prev };
-      if (itemId in updated) {
-        delete updated[itemId];
+      if (Object.prototype.hasOwnProperty.call(prev, itemId)) {
+        const copy = { ...prev };
+        delete copy[itemId];
+        return copy;
       } else {
-        updated[itemId] = 0;
+        return { ...prev, [itemId]: 0 };
       }
-      return updated;
     });
   };
 
   const handleQuantityInput = (itemId, value) => {
-    const item = stock.find(i => i._id === itemId);
-    let qty = Number(value);
-    if (isNaN(qty) || qty < 0) qty = 0;
-    if (item && qty > item.itemQuantity) qty = item.itemQuantity;
-    setSelectedItems(prev => ({ ...prev, [itemId]: qty }));
+    setSelectedItems(prev => {
+      const item = stock.find(i => i._id === itemId);
+      let newValue = Number(value);
+      if (isNaN(newValue) || newValue < 0) newValue = 0;
+      return { ...prev, [itemId]: newValue };
+    });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
+  const handleReturn = async (data) => {
+    setLoading(true);
+    setSuccess(false);
 
-    const structuredItems = Object.entries(selectedItems)
-      .filter(([_, qty]) => qty > 0)
-      .map(([id, qty]) => {
-        const item = stock.find(i => i._id === id);
-        return {
-          itemId: id,
-          itemName: item?.itemName || 'Unknown',
-          taken: qty
-        };
-      });
+    const shobaValue = watch("shoba");
+    const nameDetailsValue = watch("nameDetails");
+    const aimsIdValue = watch("aimsId");
 
-    if (structuredItems.length === 0) {
-      setError('Please select at least one item with quantity.');
-      return;
-    }
+    const items = Object.entries(selectedItems)
+      .filter(([id, qty]) => qty > 0)
+      .map(([id, qty]) => ({
+        id,
+        change: qty, // returning items adds to stock
+        returned: qty
+      }));
 
     try {
-      const res = await fetch('/api/returnItems', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, aimsId, shoba, items: structuredItems }),
+      const res = await fetch("/api/update-stock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items,
+          action: "return",
+          shoba: shobaValue,
+          nameDetails: nameDetailsValue,
+          aimsId: aimsIdValue
+        })
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to save return items');
-
-      setSuccess('Return items saved and stock updated!');
-      setName('');
-      setAimsId('');
-      setShoba('');
+      const result = await res.json();
+      setDemandNumber(result.dimandNumber);
+      const req = await fetch("/api/getStock");
+      const updatedStock = await req.json();
+      setStock(updatedStock);
       setSelectedItems({});
-      setSearchQuery('');
-      fetchReturnItems();
-      fetchStock();
+      setSuccess(true);
     } catch (err) {
-      setError(err.message);
+      console.error("Error saving return:", err);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const filteredReturns = allReturns.filter((item) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      Array.isArray(item.items) &&
-      item.items.some(i => i.itemName?.toLowerCase().includes(query)) ||
-      item.shoba?.toLowerCase().includes(query)
-    );
-  });
-
-  const filteredStock = stock.filter(item =>
-    item.itemName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <>
-      <Navbar />
-      <div style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
-        <h1>📦 Return Items</h1>
+      <div className="saveNav">
+        {!success && (
+          <button
+            className="done"
+            type="submit"
+            form="return-items-form"
+            disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}
+          >
+            🔄 Return Items
+          </button>
+        )}
+      </div>
 
-        {/* 🔍 Search Bar */}
-        <input
-          type="text"
-          placeholder="Search items to return..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            marginBottom: '1rem',
-            width: '100%',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-          }}
-        />
+      {success && (
+        <div className="success" style={{ color: "green", textAlign: "center", margin: "10px 0" }}>
+          ✅ Items returned successfully! Reference Number: <b>{demandNumber}</b>
+        </div>
+      )}
 
-        {/* 📝 Form */}
-        <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-          <input type="text" placeholder="AIMS ID" value={aimsId} onChange={(e) => setAimsId(e.target.value)} required />
-          <input type="text" placeholder="Shoba" value={shoba} onChange={(e) => setShoba(e.target.value)} required />
+      <div className="getItemsPage">
+        <form id="return-items-form" onSubmit={handleSubmit(handleReturn)}>
+          <div className="details">
+            <div className="input">
+              <label htmlFor="shoba">Shoba</label>
+              <select
+                name="shoba"
+                id="shoba"
+                {...register("shoba", { required: "Please select Shoba" })}
+                defaultValue=""
+              >
+                <option value="" disabled>Select Shoba</option>
+                {departments.map((dept, idx) => (
+                  <option key={idx} value={dept.department}>{dept.department}</option>
+                ))}
+              </select>
+              {errors.shoba && <span style={{ color: 'red' }}>{errors.shoba.message}</span>}
+            </div>
 
-          {/* 🔄 Filtered Item Selector */}
-          <div>
-            <h3>Select Items to Return</h3>
-            {filteredStock.length > 0 ? (
-              filteredStock.map(item => (
-                <div key={item._id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedItems[item._id] !== undefined}
-                    onChange={() => handleCheckbox(item._id)}
-                  />
-                  <span>{item.itemName}</span>
-                  <input
-                    type="number"
-                    min={0}
-                    max={item.itemQuantity}
-                    disabled={selectedItems[item._id] === undefined}
-                    value={selectedItems[item._id] ?? ''}
-                    onChange={(e) => handleQuantityInput(item._id, e.target.value)}
-                    style={{ width: '60px' }}
-                  />
-                  <span style={{ fontSize: '12px', color: '#888' }}>
-                    (Max: {item.itemQuantity})
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p>No matching items found.</p>
-            )}
+            <div className="input">
+              <label htmlFor="nameDetails">Name</label>
+              <input
+                type="text"
+                placeholder='Enter your name'
+                {...register("nameDetails", { required: "Please enter your name" })}
+              />
+              {errors.nameDetails && <span style={{ color: 'red' }}>{errors.nameDetails.message}</span>}
+            </div>
+
+            <div className="input">
+              <label htmlFor="aimsId">Aims Id</label>
+              <input
+                type="text"
+                placeholder='Enter AIMS ID'
+                {...register("aimsId", {
+                  required: "Please enter your AIMS ID",
+                  pattern: {
+                    value: /^\d{1,5}$/,
+                    message: "AIMS ID must be a number with up to 5 digits"
+                  }
+                })}
+              />
+              {errors.aimsId && <span style={{ color: 'red' }}>{errors.aimsId.message}</span>}
+            </div>
           </div>
 
-          <button type="submit" style={{ padding: '0.5rem', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-            Submit Return
-          </button>
-        </form>
+          <div className="searchBar">
+            <input
+              type="text"
+              placeholder="Search items..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {success && <p style={{ color: 'green' }}>{success}</p>}
-
-        {/* 📋 Return History Table */}
-        <table style={{ marginTop: '2rem', width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th style={{ borderBottom: '2px solid #000', textAlign: 'left', padding: '0.5rem' }}>Name</th>
-              <th style={{ borderBottom: '2px solid #000', textAlign: 'left', padding: '0.5rem' }}>AIMS ID</th>
-              <th style={{ borderBottom: '2px solid #000', textAlign: 'left', padding: '0.5rem' }}>Shoba</th>
-              <th style={{ borderBottom: '2px solid #000', textAlign: 'left', padding: '0.5rem' }}>Items</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredReturns.length > 0 ? (
-              filteredReturns.map((returnItem) => (
-                <tr key={returnItem._id}>
-                  <td style={{ borderBottom: '1px solid #000', padding: '0.5rem' }}>{returnItem.name}</td>
-                  <td style={{ borderBottom: '1px solid #000', padding: '0.5rem' }}>{returnItem.aimsId}</td>
-                  <td style={{ borderBottom: '1px solid #000', padding: '0.5rem' }}>{returnItem.shoba}</td>
-                  <td style={{ borderBottom: '1px solid #000', padding: '0.5rem' }}>
-                    {Array.isArray(returnItem.items)
-                      ? returnItem.items.map((i, idx) => (
-                          <div key={idx}>
-                            {i.itemName} — Taken: {i.taken}
-                          </div>
-                        ))
-                      : returnItem.items}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" style={{ padding: '1rem', textAlign: 'center' }}>
-                  No matching return items found.
-                </td>
-              </tr>
+          <div className="listOFitems">
+            {search.trim() === "" ? null : (
+              Array.isArray(stock) && stock.length > 0 ? (
+                stock.filter(item =>
+                  item.itemName && item.itemName.toLowerCase().includes(search.toLowerCase())
+                ).map((item, idx) => (
+                  <div className="item" key={item._id || idx}>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems[item._id] !== undefined}
+                      onChange={() => handleCheckbox(item._id)}
+                    />
+                    <span>{item.itemName}</span>
+                    <div className="changeQuantity">
+                      <input
+                        type="number"
+                        min={0}
+                        max={item.itemQuantity + 1000} // optional: allow returns beyond current stock
+                        disabled={selectedItems[item._id] === undefined}
+                        value={selectedItems[item._id] !== undefined && selectedItems[item._id] !== 0 ? selectedItems[item._id] : ""}
+                        onChange={e => handleQuantityInput(item._id, e.target.value)}
+                        style={{ width: "60px", marginRight: "10px" }}
+                      />
+                      <span style={{ fontSize: "12px", color: "#888" }}>
+                        (Returning)
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>No items found</div>
+              )
             )}
-          </tbody>
-        </table>
+          </div>
+        </form>
       </div>
     </>
   );
-}
+};
+
+export default Page;
