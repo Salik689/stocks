@@ -11,7 +11,6 @@ const Page = () => {
   const [search, setSearch] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [returnedItems, setReturnedItems] = useState([]);
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -28,20 +27,8 @@ const Page = () => {
       setDepartments(data);
     };
 
-    const fetchReturnedItems = async () => {
-      try {
-        const res = await fetch("/api/returnItems");
-        const data = await res.json();
-        setReturnedItems(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Error fetching returned items:", err);
-        setReturnedItems([]);
-      }
-    };
-
     fetchStock();
     fetchDepartments();
-    fetchReturnedItems();
   }, []);
 
   const handleCheckbox = (itemId) => {
@@ -93,9 +80,6 @@ const Page = () => {
       setStock(updatedStock);
       setSelectedItems({});
       setSuccess(true);
-
-      const updatedReturns = await (await fetch("/api/returnItems")).json();
-      setReturnedItems(Array.isArray(updatedReturns) ? updatedReturns : []);
     } catch (err) {
       console.error("Error saving return:", err);
     } finally {
@@ -106,7 +90,6 @@ const Page = () => {
   return (
     <>
       <Navbar />
-
       <div className="saveNav">
         {!success && (
           <button
@@ -216,46 +199,6 @@ const Page = () => {
             )}
           </div>
         </form>
-
-        <div className="returnedItemsTable">
-          <h2>📋 Returned Items History</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>AIMS ID</th>
-                <th>Shoba</th>
-                <th>Items</th>
-              </tr>
-            </thead>
-            <tbody>
-              {returnedItems.length > 0 ? (
-                returnedItems.map((entry, idx) => (
-                  <tr key={entry._id || idx}>
-                    <td>{entry.nameDetails || entry.name}</td>
-                    <td>{entry.aimsId}</td>
-                    <td>{entry.shoba}</td>
-                    <td>
-                      {Array.isArray(entry.items)
-                        ? entry.items.map((i, iIdx) => (
-                            <div key={iIdx}>
-                              {i.itemName} — Returned: {i.returned}
-                            </div>
-                          ))
-                        : entry.items}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" style={{ textAlign: "center" }}>
-                    No return records found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
     </>
   );
