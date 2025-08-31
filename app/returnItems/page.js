@@ -72,21 +72,20 @@ const Page = () => {
     const items = Object.entries(selectedItems)
       .filter(([_, qty]) => qty > 0)
       .map(([id, qty]) => ({
-        id,
-        change: qty,
+        itemId: id,
+        itemName: stock.find(i => i._id === id)?.itemName || "Unknown",
         returned: qty
       }));
 
     try {
-      await fetch("/api/update-stock", {
+      await fetch("/api/returnItems", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items,
-          action: "return",
+          name: nameDetailsValue,
+          aimsId: aimsIdValue,
           shoba: shobaValue,
-          nameDetails: nameDetailsValue,
-          aimsId: aimsIdValue
+          items
         })
       });
 
