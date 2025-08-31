@@ -18,7 +18,6 @@ export default function ReturnItemsPage() {
   const [success, setSuccess] = useState('');
   const [allReturns, setAllReturns] = useState([]);
 
-  // Fetch return history and stock on mount
   useEffect(() => {
     fetchReturnItems();
     fetchStock();
@@ -120,6 +119,10 @@ export default function ReturnItemsPage() {
     );
   });
 
+  const filteredStock = stock.filter(item =>
+    item.itemName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       <Navbar />
@@ -129,7 +132,7 @@ export default function ReturnItemsPage() {
         {/* 🔍 Search Bar */}
         <input
           type="text"
-          placeholder="Search by item name or shoba..."
+          placeholder="Search items to return..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
@@ -147,11 +150,11 @@ export default function ReturnItemsPage() {
           <input type="text" placeholder="AIMS ID" value={aimsId} onChange={(e) => setAimsId(e.target.value)} required />
           <input type="text" placeholder="Shoba" value={shoba} onChange={(e) => setShoba(e.target.value)} required />
 
-          {/* 🔄 Item Selector */}
+          {/* 🔄 Filtered Item Selector */}
           <div>
             <h3>Select Items to Return</h3>
-            {Array.isArray(stock) && stock.length > 0 ? (
-              stock.map(item => (
+            {filteredStock.length > 0 ? (
+              filteredStock.map(item => (
                 <div key={item._id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
                   <input
                     type="checkbox"
@@ -174,7 +177,7 @@ export default function ReturnItemsPage() {
                 </div>
               ))
             ) : (
-              <p>No stock available.</p>
+              <p>No matching items found.</p>
             )}
           </div>
 
