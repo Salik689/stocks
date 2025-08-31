@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import '../returnItems.css';
+import '../returnItems.css'; // ✅ Correct path
 import Navbar from '../../components/Navbar';
 
 const HistoryPage = () => {
@@ -29,10 +29,10 @@ const HistoryPage = () => {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>AIMS ID</th>
-              <th>Shoba</th>
-              <th>Items</th>
+              <th scope="col">Name</th>
+              <th scope="col">AIMS ID</th>
+              <th scope="col">Shoba</th>
+              <th scope="col">Items</th>
             </tr>
           </thead>
           <tbody>
@@ -43,19 +43,23 @@ const HistoryPage = () => {
                   <td>{entry.aimsId}</td>
                   <td>{entry.shoba}</td>
                   <td>
-                    {Array.isArray(entry.items)
-                      ? entry.items.map((i, iIdx) => (
-                          <div key={iIdx}>
+                    {Array.isArray(entry.items) ? (
+                      <ul style={{ paddingLeft: '1rem', margin: 0 }}>
+                        {entry.items.map((i, iIdx) => (
+                          <li key={iIdx}>
                             {i.itemName} — Returned: {i.returned}
-                          </div>
-                        ))
-                      : entry.items}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      entry.items
+                    )}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>
+                <td colSpan="4" style={{ textAlign: "center", fontStyle: "italic", color: "#666" }}>
                   No return records found.
                 </td>
               </tr>

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import '../returnItems.css';
+import './returnItems.css';
 import Navbar from '../components/Navbar';
 
 const Page = () => {
@@ -33,13 +33,13 @@ const Page = () => {
 
   const handleCheckbox = (itemId) => {
     setSelectedItems(prev => {
-      if (itemId in prev) {
-        const copy = { ...prev };
+      const copy = { ...prev };
+      if (itemId in copy) {
         delete copy[itemId];
-        return copy;
       } else {
-        return { ...prev, [itemId]: 0 };
+        copy[itemId] = 0;
       }
+      return copy;
     });
   };
 
@@ -52,9 +52,14 @@ const Page = () => {
     setLoading(true);
     setSuccess(false);
 
-    const shobaValue = watch("customShoba")?.trim() || watch("shoba");
-    const nameDetailsValue = watch("nameDetails");
-    const aimsIdValue = watch("aimsId");
+    const shobaValue = watch("customShoba")?.trim() || watch("shoba")?.trim();
+    const nameDetailsValue = watch("nameDetails")?.trim();
+    const aimsIdValue = watch("aimsId")?.trim();
+
+    if (!nameDetailsValue || !aimsIdValue || !shobaValue) {
+      setLoading(false);
+      return;
+    }
 
     const items = Object.entries(selectedItems)
       .filter(([_, qty]) => qty > 0)
@@ -63,6 +68,11 @@ const Page = () => {
         itemName: stock.find(i => i._id === id)?.itemName || "Unknown",
         returned: qty
       }));
+
+    if (items.length === 0) {
+      setLoading(false);
+      return;
+    }
 
     try {
       await fetch("/api/returnItems", {
@@ -91,16 +101,14 @@ const Page = () => {
     <>
       <Navbar />
       <div className="saveNav">
-        {!success && (
-          <button
-            className="done"
-            type="submit"
-            form="return-items-form"
-            disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}
-          >
-            🔄 Return Items
-          </button>
-        )}
+        <button
+          className="done"
+          type="submit"
+          form="return-items-form"
+          disabled={Object.values(selectedItems).every(qty => qty === 0) || loading}
+        >
+          {loading ? "Processing..." : "🔄 Return Items"}
+        </button>
       </div>
 
       {success && (
@@ -126,6 +134,7 @@ const Page = () => {
               <label htmlFor="customShoba">Or enter Shoba manually</label>
               <input
                 type="text"
+                id="customShoba"
                 placeholder="Enter custom Shoba"
                 {...register("customShoba")}
               />
@@ -139,7 +148,8 @@ const Page = () => {
               <label htmlFor="nameDetails">Name</label>
               <input
                 type="text"
-                placeholder='Enter your name'
+                id="nameDetails"
+                placeholder="Enter your name"
                 {...register("nameDetails", { required: "Please enter your name" })}
               />
               {errors.nameDetails && <span style={{ color: 'red' }}>{errors.nameDetails.message}</span>}
@@ -149,7 +159,8 @@ const Page = () => {
               <label htmlFor="aimsId">AIMS ID</label>
               <input
                 type="text"
-                placeholder='Enter AIMS ID'
+                id="aimsId"
+                placeholder="Enter AIMS ID"
                 {...register("aimsId", {
                   required: "Please enter your AIMS ID",
                   pattern: {
