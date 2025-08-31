@@ -1,0 +1,116 @@
+/* Container layout */
+.getItemsPage {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Top nav save button */
+.saveNav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+}
+
+.done {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.done:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Success message */
+.success {
+  font-size: 1rem;
+  background-color: #e6ffe6;
+  border: 1px solid #4CAF50;
+  padding: 0.75rem;
+  border-radius: 6px;
+}
+
+/* Form layout */
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+}
+
+.input label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.input input,
+.input select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Search bar */
+.searchBar {
+  margin-bottom: 1.5rem;
+}
+
+.searchBar input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+/* Item list */
+.listOFitems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.item span {
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.changeQuantity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.changeQuantity input {
+  width: 60px;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.changeQuantity span {
+  font-size: 12px;
+  color: #888;
+}
