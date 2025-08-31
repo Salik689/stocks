@@ -16,7 +16,7 @@ export async function POST() {
     return NextResponse.json({ error: "Failed to increment dimand number" }, { status: 500 });
   }
 }
-import clientPromise from "../../../backend/lib/mongodb";
+import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
 export async function GET() {

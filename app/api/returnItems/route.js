@@ -1,8 +1,28 @@
-import { MongoClient } from 'mongodb';
+// app/api/returnItems/route.js
+import clientPromise from '@/lib/mongodb';
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-const dbName = 'inventory'; // Your database name
+const dbName = 'inventory';
+
+export async function GET() {
+  try {
+    const client = await clientPromise;
+    const db = client.db(dbName);
+    const collection = db.collection('returnItems');
+
+    const returnItems = await collection.find().sort({ createdAt: -1 }).toArray();
+
+    return new Response(JSON.stringify(returnItems), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('❌ GET error:', error);
+    return new Response(JSON.stringify([]), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
 
 export async function POST(request) {
   try {
@@ -16,15 +36,15 @@ export async function POST(request) {
       });
     }
 
-    await client.connect();
+    const client = await clientPromise;
     const db = client.db(dbName);
     const collection = db.collection('returnItems');
 
     await collection.insertOne({
-      name,
-      aimsId,
-      shoba,
-      items,
+      name: name.trim(),
+      aimsId: aimsId.trim(),
+      shoba: shoba.trim(),
+      items: items.trim(),
       createdAt: new Date(),
     });
 
@@ -34,28 +54,7 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error('❌ POST error:', error);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-}
-
-export async function GET() {
-  try {
-    await client.connect();
-    const db = client.db(dbName);
-    const collection = db.collection('returnItems');
-
-    const returnItems = await collection.find().sort({ createdAt: -1 }).toArray();
-
-    return new Response(JSON.stringify(returnItems), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    console.error('❌ GET error:', error);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

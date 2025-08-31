@@ -1,4 +1,4 @@
-import clientPromise from "../../../backend/lib/mongodb"; // MongoDB connection
+import clientPromise from "../../../lib/mongodb"; // MongoDB connection
 import { ObjectId } from "mongodb";
 import nodemailer from "nodemailer";
 

@@ -1,4 +1,4 @@
-import clientPromise from "./lib/mongodb.js";
+import clientPromise from "../lib/mongodb.js";
 
 async function resetEmailCounter() {
   const client = await clientPromise;

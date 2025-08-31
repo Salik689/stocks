@@ -3,7 +3,7 @@ dotenv.config({ path: '.env.local' });
 
 import express from 'express';
 import cors from 'cors';
-import clientPromise from './lib/mongodb.js';
+import clientPromise from '../lib/mongodb.js';
 
 const app = express();
 const port = 3000;
