@@ -22,14 +22,17 @@ const HistoryPage = () => {
     fetchReturnedItems();
   }, []);
 
-  // Filter logic based on search query
   const filteredItems = returnedItems.filter(entry => {
     const query = searchQuery.toLowerCase();
+
     const shobaMatch = entry.shoba?.toLowerCase().includes(query);
+    const nameMatch = (entry.nameDetails || entry.name)?.toLowerCase().includes(query);
+    const aimsIdMatch = entry.aimsId?.toLowerCase().includes(query);
     const itemMatch = Array.isArray(entry.items)
       ? entry.items.some(i => i.itemName?.toLowerCase().includes(query))
       : false;
-    return shobaMatch || itemMatch;
+
+    return shobaMatch || nameMatch || aimsIdMatch || itemMatch;
   });
 
   return (
@@ -38,11 +41,10 @@ const HistoryPage = () => {
       <div className="returnedItemsTable">
         <h2>📋 Returned Items History</h2>
 
-        {/* Search Bar */}
         <div style={{ marginBottom: '1rem' }}>
           <input
             type="text"
-            placeholder="Search by item name or shoba..."
+            placeholder="Search by name, AIMS ID, shoba, or item name..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             style={{
