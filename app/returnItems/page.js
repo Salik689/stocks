@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import './getItem.css'; // You can rename this to returnItem.css if needed
+
 
 const Page = () => {
   const [stock, setStock] = useState([]);
