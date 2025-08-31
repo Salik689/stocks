@@ -114,3 +114,49 @@
   font-size: 12px;
   color: #888;
 }
+/* returnItems.css */
+
+/* Table container */
+.returnedItemsTable {
+  margin-top: 3rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Table element */
+.returnedItemsTable table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+}
+
+/* Table headers */
+.returnedItemsTable th {
+  background-color: #eaeaea;
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid #ccc;
+  font-weight: 600;
+}
+
+/* Table cells */
+.returnedItemsTable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+/* Item list inside cell */
+.returnedItemsTable td div {
+  margin-bottom: 4px;
+}
+
+/* Empty state */
+.returnedItemsTable td[colspan="4"] {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
