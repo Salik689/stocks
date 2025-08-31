@@ -40,6 +40,7 @@ export default function Navbar() {
                     <Link href={"/change"}><li>Submitions</li></Link>
                     <Link href={"/notes"}><li>Notes for extra items</li></Link>
                     <Link href={"/returnItems"}><li>Notes for return items</li></Link>
+                    <Link href={"/returnItems/history"}><li>History for return</li></Link>
 
 
                 </ul>
