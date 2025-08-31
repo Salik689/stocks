@@ -239,10 +239,10 @@ const Page = () => {
                       {Array.isArray(entry.items)
                         ? entry.items.map((i, iIdx) => (
                             <div key={iIdx}>
-                              {i.itemName} — Returned: {i.returned || i.taken}
+                              {i.itemName} — Returned: {i.returned}
                             </div>
                           ))
-                        : "—"}
+                        : entry.items}
                     </td>
                   </tr>
                 ))
