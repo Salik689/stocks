@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import '../../returnItems.css'; // Adjust path if needed
+import '../returnItems.css'; // for history/page.js
+import './returnItems.css';  // for returnItems/page.js
 import Navbar from '../../components/Navbar';
 
 const HistoryPage = () => {
